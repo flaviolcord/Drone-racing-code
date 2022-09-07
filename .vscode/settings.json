@@ -1,0 +1,16 @@
+{
+    "python.analysis.extraPaths": [
+        "./subsystems"
+    ],
+    "cSpell.words": [
+        "aruco",
+        "KEYDOWN",
+        "KEYUP",
+        "opencv",
+        "pygame",
+        "streamoff",
+        "streamon",
+        "subsys",
+        "Tello"
+    ]
+}
