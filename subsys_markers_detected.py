@@ -1,18 +1,13 @@
 from parameters import cv2
 
 # output of subsystem
-
-
 class markers_status:
     corners = []
     ids = []
 
-
 # subsystem
 class MarkersDetected:
-
     PARAM_DRAW_MARKERS = True
-
     @classmethod
     def setup(cls):
         pass
@@ -36,7 +31,6 @@ class MarkersDetected:
     def __find_markers(cls, frame):
         # Our operations on the frame come here
         gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
-
         aruco_dict = cv2.aruco.Dictionary_get(cv2.aruco.DICT_4X4_100)
         parameters = cv2.aruco.DetectorParameters_create()
         corners, ids, _ = cv2.aruco.detectMarkers(
@@ -44,7 +38,6 @@ class MarkersDetected:
         )
 
         return corners, ids
-
     @classmethod
     def __draw_markers(cls, frame, corners, ids):
         cv2.aruco.drawDetectedMarkers(

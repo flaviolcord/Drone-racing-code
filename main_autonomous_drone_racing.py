@@ -11,7 +11,7 @@ from subsys_visual_control import VisualControl
 
 
 def setup():
-    ENV.status = ENV.SIMULATION
+    ENV.status = ENV.SIMULATION # met 2 éléments de la classe ENV à égalité
     TelloSensors.setup()
     TelloActuators.setup(TelloSensors.TELLO)
     # ReadCAM.setup()
@@ -30,7 +30,7 @@ def run():
     markers_status, frame = MarkersDetected.run(frame)
     marker_status = SelectTargetMarker.run(
         frame, markers_status, DRONE_POS, offset=(-4, 0))
-    rc_status_2 = VisualControl.run(marker_status, drone_status)
+    rc_status_2 = VisualControl.run(marker_status, drone_status,id)
 
     if key_status.is_pressed:
         rc_status = rc_status_1
@@ -43,6 +43,7 @@ def run():
                 Battery=drone_status.battery,
                 Roll=drone_status.roll,
                 Pitch=drone_status.pitch,
+                hauteur=drone_status.hauteur,
                 Yaw=drone_status.yaw,
                 Mode=mode_status.value,
                 LeftRight=rc_status.a,
@@ -56,10 +57,10 @@ def run():
                 m_distance=marker_status.m_distance,
                 m_height=marker_status.height,
                 m_width=marker_status.width,
+                haut_angle=marker_status.haut_angle,
                 )
 
     time.sleep(1 / FPS)
-
 
 def stop():
     Display.stop()
@@ -68,7 +69,6 @@ def stop():
     ReadKeyboard.stop()
     MarkersDetected.stop()
     SelectTargetMarker.stop()
-
 
 if __name__ == "__main__":
     setup()

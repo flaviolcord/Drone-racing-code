@@ -1,27 +1,20 @@
 from parameters import run_status, RUN, MODE, pygame
 
-
 # output of subsystem
-
-
 class key_status:
     is_pressed = False
     type_pressed = None
 
-
-class rc_status:
+class rc_status: #initialement aucune hélice ne tournent
     a = 0
     b = 0
     c = 0
     d = 0
 
-
 class mode_status:
-    value = MODE.LAND
+    value = MODE.LAND# initialement le drone est à terre
 
 # Subsystem
-
-
 class ReadKeyboard:
     """Maintains the Tello display and moves it through the keyboard keys.
     Press escape key to quit.
@@ -37,12 +30,12 @@ class ReadKeyboard:
     def setup(cls):
         run_status.value = RUN.START
         mode_status.value = -1
-
+        
     @classmethod
     def run(cls, rc_threshold):
         for event in pygame.event.get():
 
-            if event.type == pygame.QUIT:
+            if event.type == pygame.QUIT:#arrete la simulation
                 run_status.value = RUN.STOP
 
             elif event.type == pygame.KEYDOWN:
@@ -51,18 +44,15 @@ class ReadKeyboard:
 
                 if event.key == pygame.K_ESCAPE:
                     run_status.value = RUN.STOP
-
                 elif event.key == pygame.K_SPACE:
                     mode_status.value = MODE.EMERGENCY
                 elif event.key == pygame.K_t:
                     mode_status.value = MODE.TAKEOFF
                 elif event.key == pygame.K_l:
                     mode_status.value = MODE.LAND
-
                 else:
-                    cls.__key_down(event.key, rc_threshold)
-
-            elif event.type == pygame.KEYUP:
+                    cls.__key_down(event.key, rc_threshold)#si aucune action spécial on regarde les actions types direction
+            elif event.type == pygame.KEYUP:#aucunes touches d'appuyées
 
                 key_status.is_pressed = False
                 key_status.type_pressed = None
@@ -96,7 +86,7 @@ class ReadKeyboard:
             rc_status.c = -rc_threshold
 
         # yaw_velocity
-        elif key == pygame.K_d:
+        elif key == pygame.K_d: #permet de faire tourner le drone sur lui même
             rc_status.d = rc_threshold
         elif key == pygame.K_q:
             rc_status.d = -rc_threshold

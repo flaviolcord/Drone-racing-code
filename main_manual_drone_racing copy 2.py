@@ -9,7 +9,7 @@ from subsys_tello_actuators import TelloActuators
 
 
 def setup():
-    ENV.status = ENV.SIMULATION
+    ENV.status = ENV.REAL
     TelloSensors.setup()
     TelloActuators.setup(TelloSensors.TELLO)
     Display.setup()
@@ -19,7 +19,7 @@ def setup():
 
 def run():
     # run keyboard subsystem
-    rc_status, key_status, mode_status = ReadKeyboard.run(rc_threshold=100)
+    rc_status, key_status, mode_status = ReadKeyboard.run(rc_threshold=20)
     frame, drone_status = TelloSensors.run(mode_status)
     markers_status, frame = MarkersDetected.run(frame)
     marker_status = SelectTargetMarker.run(
@@ -44,8 +44,7 @@ def run():
                 m_distance=marker_status.m_distance,
                 m_height=marker_status.height,
                 m_width=marker_status.width,
-               
-                
+                haut_angle=marker_status.haut_angle,
                 )
     time.sleep(1 / FPS)
 

@@ -16,7 +16,7 @@ class TelloActuators:
         """Update routine. Send velocities to Tello.
         """
         cls.TELLO.send_rc_control(
-            rc_status.a,  # left_right_velocity,
+            rc_status.a,  # left_right_velocity, les valeurs doivent être comprise en -100 et  100
             rc_status.b,  # for_back_velocity,
             rc_status.c,  # up_down_velocity,
             rc_status.d,  # yaw_velocity,

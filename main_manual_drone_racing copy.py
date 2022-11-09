@@ -30,7 +30,6 @@ def run():
                 Battery=drone_status.battery,
                 Roll=drone_status.roll,
                 Pitch=drone_status.pitch,
-                hauteur=drone_status.hauteur,
                 Yaw=drone_status.yaw,
                 Mode=mode_status.value,
                 LeftRight=rc_status.a,
@@ -44,8 +43,7 @@ def run():
                 m_distance=marker_status.m_distance,
                 m_height=marker_status.height,
                 m_width=marker_status.width,
-               
-                
+                haut_angle=marker_status.haut_angle,
                 )
     time.sleep(1 / FPS)
 
