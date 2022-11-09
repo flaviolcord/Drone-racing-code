@@ -3,15 +3,14 @@ from DJITelloPy.djitellopy.tello import Tello
 
 # output of subsystem
 
-
 class drone_status:
     battery = 0
     roll = 0
     pitch = 0
     yaw = 0
+    hauteur=0
 
 # subsystem
-
 
 class TelloSensors:
     TELLO = None
@@ -35,6 +34,7 @@ class TelloSensors:
     @classmethod
     def run(cls, mode_status):
         # input
+        
         if mode_status.value == MODE.TAKEOFF:
             cls.TELLO.takeoff()
             mode_status.value = MODE.FLIGHT
@@ -47,10 +47,11 @@ class TelloSensors:
 
         cls.mode = mode_status.value
         # output
+        drone_status.hauteur=cls.TELLO.get_height()#hauteur en cm
         drone_status.battery = cls.TELLO.get_battery()
-        drone_status.roll = cls.TELLO.get_roll()
-        drone_status.pitch = cls.TELLO.get_pitch()
-        drone_status.yaw = cls.TELLO.get_yaw()
+        drone_status.roll = cls.TELLO.get_roll()#en degré
+        drone_status.pitch = cls.TELLO.get_pitch()#en degré
+        drone_status.yaw = cls.TELLO.get_yaw()#en degré
         return cls.image(), drone_status
 
     @classmethod

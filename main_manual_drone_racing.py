@@ -17,21 +17,20 @@ def setup():
     MarkersDetected.setup()
     SelectTargetMarker.setup()
 
-
 def run():
     # run keyboard subsystem
-    rc_status, key_status, mode_status = ReadKeyboard.run(rc_threshold=40)
+    rc_status, key_status, mode_status = ReadKeyboard.run(rc_threshold=100)
     frame, drone_status = TelloSensors.run(mode_status)
     markers_status, frame = MarkersDetected.run(frame)
     marker_status = SelectTargetMarker.run(
         frame, markers_status, DRONE_POS, offset=(-4, 0))
 
     TelloActuators.run(rc_status)
-
     Display.run(frame,
                 Battery=drone_status.battery,
                 Roll=drone_status.roll,
                 Pitch=drone_status.pitch,
+                hauteur=drone_status.hauteur,
                 Yaw=drone_status.yaw,
                 Mode=mode_status.value,
                 LeftRight=rc_status.a,
@@ -45,8 +44,9 @@ def run():
                 m_distance=marker_status.m_distance,
                 m_height=marker_status.height,
                 m_width=marker_status.width,
+               
+                
                 )
-
     time.sleep(1 / FPS)
 
 

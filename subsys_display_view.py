@@ -2,7 +2,6 @@ import pygame
 import numpy as np
 from parameters import RED, IMG_SIZE, SCREEN_SIZE
 
-
 class Display:
     # Parameters
     SCREEN = None
@@ -48,7 +47,6 @@ class Display:
         pygame.init()
         pygame.font.init()  # The font
         cls.FONT_PANEL_INFO = pygame.font.Font('freesansbold.ttf', 18)
-
         # create pygame screen
         shift_left = SCREEN_SIZE[0] - IMG_SIZE[0]
         cls.pos_img_in_screen = (shift_left, 0)
@@ -62,16 +60,12 @@ class Display:
     def run(cls, frame, **karg):
 
         cls.SCREEN.fill([0, 0, 0])
-
         # cls._log("Battery:", f"{DRONE_STATUS.battery}%")
         for key in karg:
             cls._log(f"{key}: ", f"{karg[key]}")
-
         frame = np.rot90(frame)
         frame = np.flipud(frame)
         frame = pygame.surfarray.make_surface(frame)
-
         cls._update_log()
         cls.SCREEN.blit(frame, cls.pos_img_in_screen)
-
         pygame.display.update()

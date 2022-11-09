@@ -1,6 +1,7 @@
+from tkinter import HORIZONTAL
 from parameters import RED, cv2, np
-# output of subsystem
 
+# output of subsystem
 
 class marker_status:
     id = -1
@@ -13,7 +14,6 @@ class marker_status:
     # Vertical axis
     left_pt = (0, 0)
     right_pt = (0, 0)
-
     # Horizontal angle
     h_angle = 0
     # Vertical angle
@@ -21,10 +21,9 @@ class marker_status:
     # angle and distance between marker and drone
     m_angle = 0
     m_distance = 0
-
     height = 0
     width = 0
-
+    haut_angle=0
     @classmethod
     def reset(cls):
         cls.id = -1
@@ -40,9 +39,9 @@ class marker_status:
         cls.m_distance = 0
         cls.height = 0
         cls.width = 0
+        cls.haut_angle=0
 
 # subsystem
-
 
 class SelectTargetMarker:
     @classmethod
@@ -80,10 +79,10 @@ class SelectTargetMarker:
         cls.marker_pos = (center_pt[0] + cls.offset[0],
                           center_pt[1] + cls.offset[1])
         m_angle = cls._angle_between(drone_pos,  cls.marker_pos, vertical=True)
+       
+        
         m_distance = cls._length_segment(drone_pos, cls.marker_pos)
-
         cls.draw(frame)
-
         # update output
         marker_status.id = id
         marker_status.corners = corners
@@ -132,6 +131,14 @@ class SelectTargetMarker:
     def _angle_between(p1, p2, vertical=False):
         dx = p1[0]-p2[0]
         dy = p1[1]-p2[1]
+        if not vertical:  # angle betwenn Horizantal axis and segment (p1,p2)
+            return np.arctan(-dy/(dx+0.000001))
+        else:  # angle betwenn vertical axis and segment (p1,p2)
+            return np.arctan(-dx/(dy+0.000001))
+    @staticmethod
+    def _angle_between_h(p1, p2, vertical=False):
+        dy = p1[0]-p2[0]
+        dx = -(p1[1]-p2[1])
         if not vertical:  # angle betwenn Horizantal axis and segment (p1,p2)
             return np.arctan(-dy/(dx+0.000001))
         else:  # angle betwenn vertical axis and segment (p1,p2)
