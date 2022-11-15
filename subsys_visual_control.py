@@ -24,6 +24,7 @@ class VisualControl:
 
     @classmethod
     def run(cls, target_marker, drone_status):
+
         if target_marker.id == -1:
             rc_status.c = 0
             rc_status.d = int(0.99*rc_status.d)    # yaw_velocity

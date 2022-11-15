@@ -22,6 +22,10 @@ class marker_status:
     m_angle = 0
     m_distance = 0
 
+    #Test
+    drone_crossing = False
+    last_target = -1
+
     height = 0
     width = 0
 
@@ -111,8 +115,18 @@ class SelectTargetMarker:
         for i in range(len(markers.ids)):
             id = markers.ids[i][0]
             if id < target_id or target_id == -1:
-                target_id = id
-                target_corners = markers.corners[i][0]
+                if not(marker_status.last_target > id) :
+                    target_id = id
+                    target_corners = markers.corners[i][0]
+
+        if marker_status.m_distance > 200 and marker_status.m_distance < 235:
+            for i in range(len(markers.ids)):
+                id = markers.ids[i][0]
+                if (target_id + 1) == id:
+                    target_id = id
+                    target_corners = markers.corners[i][0]
+
+        marker_status.last_target = target_id
 
         return target_id, target_corners
 
