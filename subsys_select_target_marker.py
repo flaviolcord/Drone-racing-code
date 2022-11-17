@@ -21,9 +21,14 @@ class marker_status:
     # angle and distance between marker and drone
     m_angle = 0
     m_distance = 0
+    #test
+    drone_crossing=False
+    last_target=-1
+
     height = 0
     width = 0
     haut_angle=0
+    offset_longueur=1
     @classmethod
     def reset(cls):
         cls.id = -1
@@ -56,7 +61,7 @@ class SelectTargetMarker:
     def run(cls, frame, markers, drone_pos, offset=(0, 0)):
 
         cls.drone_pos = drone_pos
-        id, corners = cls._get_marker_with_min_id(markers)
+        id, corners= cls._get_marker_with_min_id(markers)
         if id == -1:
             marker_status.reset()
             return marker_status
@@ -74,8 +79,14 @@ class SelectTargetMarker:
 
         h_angle = cls._angle_between(left_pt, right_pt)
         v_angle = cls._angle_between(top_pt, bottom_pt, vertical=True)
-
-        cls.offset = (int(offset[0]*width), int(offset[1]*height))
+        offset_longueur=[-7,-7,-7,-6,-3,-2,-4,-4,-6,-4,-3]#attention dépassement nb de porte
+        if id>=0 and id<10:
+            bon_id=id
+        else:
+            bon_id=1
+        print("bon_id", bon_id,"\n")
+        print("offset prévu",offset_longueur[bon_id],"\n")
+        cls.offset = (int(offset_longueur[bon_id]*width), int(offset[1]*height))
         cls.marker_pos = (center_pt[0] + cls.offset[0],
                           center_pt[1] + cls.offset[1])
         m_angle = cls._angle_between(drone_pos,  cls.marker_pos, vertical=True)
@@ -97,31 +108,35 @@ class SelectTargetMarker:
         marker_status.m_distance = m_distance
         marker_status.height = height
         marker_status.width = width
+        marker_status.offset_longueur=offset_longueur[bon_id]
+       
         return marker_status
 
     @staticmethod
     def _get_marker_with_min_id(markers):
         target_id = -1
         target_corners = []
+        
 
         if markers.ids is None:
             return target_id, target_corners
 
-        for i in range(len(markers.ids)):
+        for i in range(len(markers.ids)):#se diriger vers le bon id ne pas sauter des portes
             id = markers.ids[i][0]
             if id < target_id or target_id == -1:
-                if not(marker_status.last_target > id) :
+                #target_id = id
+                #target_corners = markers.corners[i][0]
+
+                if not(marker_status.last_target>id):
                     target_id = id
                     target_corners = markers.corners[i][0]
-
-        if marker_status.m_distance > 200 and marker_status.m_distance < 230:
+        if marker_status.m_distance>200 and marker_status.m_distance<235:#attention!!
             for i in range(len(markers.ids)):
-                id = markers.ids[i][0]
-                if (target_id + 1) == id:
-                    target_id = id
-                    target_corners = markers.corners[i][0]
-
-        marker_status.last_target = target_id
+                id=markers.ids[i][0]
+                if (target_id +1)==id:
+                    target_id=id
+                    target_corners=markers.corners[i][0]
+        marker_status.last_target=target_id
 
         return target_id, target_corners
 

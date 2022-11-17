@@ -1,6 +1,7 @@
 from parameters import ENV, MODE, RUN, cv2
 from DJITelloPy.djitellopy.tello import Tello
-
+import time
+from subsys_visual_control import id
 # output of subsystem
 
 class drone_status:
@@ -37,10 +38,14 @@ class TelloSensors:
         
         if mode_status.value == MODE.TAKEOFF:
             cls.TELLO.takeoff()
+            cls.TELLO.move_up(50)#à tester en vrai
             mode_status.value = MODE.FLIGHT
         elif mode_status.value == MODE.LAND:
             cls.TELLO.land()
+            
+
             mode_status.value = -1
+            
         elif mode_status.value == MODE.EMERGENCY:
             cls.TELLO.emergency()
             mode_status.value = -1

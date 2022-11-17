@@ -19,7 +19,7 @@ def setup():
 
 def run():
     # run keyboard subsystem
-    rc_status, key_status, mode_status = ReadKeyboard.run(rc_threshold=20)
+    rc_status, key_status, mode_status = ReadKeyboard.run(rc_threshold=60)
     frame, drone_status = TelloSensors.run(mode_status)
     markers_status, frame = MarkersDetected.run(frame)
     marker_status = SelectTargetMarker.run(

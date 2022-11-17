@@ -8,13 +8,13 @@ from subsys_select_target_marker import SelectTargetMarker
 from subsys_tello_sensors import TelloSensors, drone_status
 from subsys_tello_actuators import TelloActuators
 from subsys_visual_control import VisualControl
-
+from parameters import MODE, pygame
 
 def setup():
     ENV.status = ENV.SIMULATION # met 2 éléments de la classe ENV à égalité
     TelloSensors.setup()
     TelloActuators.setup(TelloSensors.TELLO)
-    # ReadCAM.setup()
+    ReadCAM.setup()
     Display.setup()
     VisualControl.setup()
     ReadKeyboard.setup()
@@ -28,9 +28,8 @@ def run():
     # get keyboard subsystem
     frame, drone_status = TelloSensors.run(mode_status)
     markers_status, frame = MarkersDetected.run(frame)
-    marker_status = SelectTargetMarker.run(
-        frame, markers_status, DRONE_POS, offset=(-4, 0))
-    rc_status_2 = VisualControl.run(marker_status, drone_status,id)
+    marker_status = SelectTargetMarker.run(frame, markers_status, DRONE_POS, offset=(-6.5, 0))#offset à définir le jour J
+    rc_status_2 = VisualControl.run(marker_status, drone_status)
 
     if key_status.is_pressed:
         rc_status = rc_status_1
@@ -58,6 +57,7 @@ def run():
                 m_height=marker_status.height,
                 m_width=marker_status.width,
                 haut_angle=marker_status.haut_angle,
+                offset=marker_status.offset_longueur
                 )
 
     time.sleep(1 / FPS)
@@ -75,5 +75,7 @@ if __name__ == "__main__":
 
     while run_status.value:
         run()
-
+        
+    
     stop()
+
