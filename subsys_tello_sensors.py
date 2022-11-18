@@ -10,6 +10,7 @@ class drone_status:
     pitch = 0
     yaw = 0
     hauteur=0
+    temps_vol=0
 
 # subsystem
 
@@ -30,6 +31,7 @@ class TelloSensors:
     @classmethod
     def stop(cls):
         # Call it always before finishing. To deallocate resources.
+        cls.TELLO.land
         cls.TELLO.end()
 
     @classmethod
@@ -57,6 +59,7 @@ class TelloSensors:
         drone_status.roll = cls.TELLO.get_roll()#en degré
         drone_status.pitch = cls.TELLO.get_pitch()#en degré
         drone_status.yaw = cls.TELLO.get_yaw()#en degré
+        drone_status.temps_vol=cls.TELLO.get_flight_time
         return cls.image(), drone_status
 
     @classmethod

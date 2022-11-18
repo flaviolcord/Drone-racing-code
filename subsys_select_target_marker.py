@@ -29,6 +29,7 @@ class marker_status:
     width = 0
     haut_angle=0
     offset_longueur=1
+    
     @classmethod
     def reset(cls):
         cls.id = -1
@@ -79,7 +80,7 @@ class SelectTargetMarker:
 
         h_angle = cls._angle_between(left_pt, right_pt)
         v_angle = cls._angle_between(top_pt, bottom_pt, vertical=True)
-        offset_longueur=[-7,-7,-7,-6,-3,-2,-4,-4,-6,-4,-3]#attention dépassement nb de porte
+        offset_longueur=[-4,-4,-4,-4,-4,-3,-4,-4,-4,-4,-3]#attention dépassement nb de porte
         if id>=0 and id<10:
             bon_id=id
         else:

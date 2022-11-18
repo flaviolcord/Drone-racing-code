@@ -9,6 +9,9 @@ from subsys_tello_sensors import TelloSensors, drone_status
 from subsys_tello_actuators import TelloActuators
 from subsys_visual_control import VisualControl
 from parameters import MODE, pygame
+from DJITelloPy.djitellopy.tello import Tello
+
+
 
 def setup():
     ENV.status = ENV.SIMULATION # met 2 éléments de la classe ENV à égalité
@@ -22,14 +25,14 @@ def setup():
     SelectTargetMarker.setup()
 
 
-def run():
+def run(compteur):
     # run keyboard subsystem
     rc_status_1, key_status, mode_status = ReadKeyboard.run(rc_threshold=20)
     # get keyboard subsystem
     frame, drone_status = TelloSensors.run(mode_status)
     markers_status, frame = MarkersDetected.run(frame)
     marker_status = SelectTargetMarker.run(frame, markers_status, DRONE_POS, offset=(-6.5, 0))#offset à définir le jour J
-    rc_status_2 = VisualControl.run(marker_status, drone_status)
+    rc_status_2 = VisualControl.run(marker_status, drone_status,compteur)
 
     if key_status.is_pressed:
         rc_status = rc_status_1
@@ -61,6 +64,7 @@ def run():
                 )
 
     time.sleep(1 / FPS)
+    return marker_status.id
 
 def stop():
     Display.stop()
@@ -69,13 +73,21 @@ def stop():
     ReadKeyboard.stop()
     MarkersDetected.stop()
     SelectTargetMarker.stop()
-
+compteur=[0,0,0,0,0,0,0,0,0,0,0]
 if __name__ == "__main__":
     setup()
 
     while run_status.value:
-        run()
-        
+       
+        print("compteur",compteur,"\n")
+        id_percu=run(compteur)
+        if id_percu>=0 and id_percu<=8:
+            compteur[id_percu]=compteur[id_percu]+1
+            print("iddd",compteur,"\n")
+        if id_percu==-1 and compteur[3]>100:
+            Tello.move_forward(Tello,1000)
+            time.sleep(1)
+            stop()
     
     stop()
 

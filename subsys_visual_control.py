@@ -15,8 +15,7 @@ class rc_status:#au debut tout à l'arret
     b = 0
     c = 0
     d = 0
-class compteur:
-    repet_id=0    
+   
 class VisualControl:
     KP_LR_CTRL = 0.2
     KP_YAW_CTRL = 0.5
@@ -24,34 +23,12 @@ class VisualControl:
     
     @classmethod
     def setup(cls):
+        
         pass
     @classmethod
-    def run(cls, target_marker, drone_status):# partie à modifier
-        if target_marker.id==nb_gate:
-            repet_id=repet_id+1
-        elif repet_id>0:
-            repet_id=repet_id-1
-        else:
-            repet_id=0
-        print("repet_id",repet_id,"\n")
-        if target_marker.id >0:
-            id=target_marker.id
-            print(id)
-        if repet_id<=10:
-            depasser=False
-        if repet_id>10:
-            depasser=True
-            print("depasser \n")
+    def run(cls, target_marker, drone_status,compteur):# partie à modifier
         
-        if depasser==True:
-            print("atteint")
-            rc_status.a=0
-            rc_status.b=0
-            rc_status.c=0
-            rc_status.d=0
-            time.sleep(1)
-            Tello.land
-            time.sleep(0.5)
+        
         
         if target_marker.id == -1:
             rc_status.b==10
