@@ -85,7 +85,6 @@ class SelectTargetMarker:
             bon_id=id
         else:
             bon_id=1
-        print("bon_id", bon_id,"\n")
         print("offset prévu",offset_longueur[bon_id],"\n")
         cls.offset = (int(offset_longueur[bon_id]*width), int(offset[1]*height))
         cls.marker_pos = (center_pt[0] + cls.offset[0],

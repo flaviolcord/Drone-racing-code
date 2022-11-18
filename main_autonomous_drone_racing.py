@@ -81,12 +81,17 @@ if __name__ == "__main__":
        
         print("compteur",compteur,"\n")
         id_percu=run(compteur)
-        if id_percu>=0 and id_percu<=8:
+        if id_percu==-1:
+            id_percu=10
+        if id_percu>=0 and id_percu<=10:
             compteur[id_percu]=compteur[id_percu]+1
+            for j in range(len(compteur)):
+                if j!=id_percu and compteur[j]>0:
+                    compteur[j]=compteur[j]-1
             print("iddd",compteur,"\n")
-        if id_percu==-1 and compteur[3]>100:
-            Tello.move_forward(Tello,1000)#distance à modifier le jour J
-            time.sleep(1)
+        if id_percu==-1 and compteur[2]>100 and compteur[1]>100:
+            Tello.move_forward(1000)#distance à modifier le jour J
+            time.sleep(2)
             stop()
     
     stop()
