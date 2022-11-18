@@ -85,7 +85,7 @@ if __name__ == "__main__":
             compteur[id_percu]=compteur[id_percu]+1
             print("iddd",compteur,"\n")
         if id_percu==-1 and compteur[3]>100:
-            Tello.move_forward(Tello,1000)
+            Tello.move_forward(Tello,1000)#distance à modifier le jour J
             time.sleep(1)
             stop()
     

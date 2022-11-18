@@ -131,7 +131,7 @@ class SelectTargetMarker:
                 if not(marker_status.last_target>id):
                     target_id = id
                     target_corners = markers.corners[i][0]
-        if marker_status.m_distance>200 and marker_status.m_distance<235:#attention!!
+        if marker_status.m_distance>200 and marker_status.m_distance<235:#attention!! A modifier
             for i in range(len(markers.ids)):
                 id=markers.ids[i][0]
                 if (target_id +1)==id:

@@ -29,22 +29,25 @@ class VisualControl:
     def run(cls, target_marker, drone_status,compteur):# partie à modifier
         
         
-        
+        for i in range (len(compteur)):
+                if compteur[i]==0:
+                    idd=i#permet de récupérer le numéro de la prochaine port à passer
+                    break
+        porte_actuelle=idd-1
         if target_marker.id == -1:
             rc_status.b==10
             rc_status.c = 0#pas de descente ni de montée
-            if rc_status.d>=0 and drone_status.hauteur>0:#à changer en réel
+            
+            print("la prochaine porte à passer est:",idd,"\n")
+            if rc_status.d>=0 and drone_status.hauteur>0:#à changer en fonction de la porte suivant
                 rc_status.d = -50
             if rc_status.d<=0 and drone_status.hauteur>0:#à changer en réel
                 rc_status.d = 50#int(0.99*rc_status.d)    # yaw_velocity
             rc_status.a = int(0.99*rc_status.a)    # left_right_velocity
             # wait for the drone to pass the last Gate
-            if cls.cmp > 10:
-                rc_status.b = int(0.99*rc_status.b)  # for_back_velocity
-
-            cls.cmp = cls.cmp + 1
+            
             return rc_status
-        cls.cmp = 0
+        
         
           
         # Get the angle and the distance between the marker and the drone
@@ -60,6 +63,18 @@ class VisualControl:
         # Forward/Backward velocity control
         rb_threshold = 50# vitesse du drone fixe?
         rc_status.b = rb_threshold - int(rb_threshold * abs(phi)/70)#angle est de 0 quand on se trouve dans la trajectoire de la porte
+        print("le drone est au niveau de la porte n°",porte_actuelle, "\n")
+        hauteur=50
+        type_porte=2
+        if type_porte==2:
+            if drone_status.hauteur<hauteur:
+                print(drone_status.hauteur)
+                rc_status.c = 20
+        else:
+            if drone_status.hauteur>hauteur:
+                print(drone_status.hauteur)
+                rc_status.c=-20
+
         #rc_status.b=rb_threshold
         # Up/Down velocity control
        # if target_marker.id ==2:
