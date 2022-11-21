@@ -5,6 +5,7 @@ from subsys_select_target_marker import marker_status
 from parameters import run_status, RUN, MODE, pygame,cv2
 import subsys_tello_sensors
 import time
+import subsys_environment
 
 # output of subsystem
 
@@ -26,7 +27,7 @@ class VisualControl:
         
         pass
     @classmethod
-    def run(cls, target_marker, drone_status,compteur):# partie à modifier
+    def run(cls, target_marker, drone_status,compteur, obstacles):# partie à modifier
         
         
         for i in range (1,len(compteur)):
@@ -74,7 +75,9 @@ class VisualControl:
         rb_threshold = 80# vitesse du drone fixe?
         rc_status.b = rb_threshold - int(rb_threshold * abs(phi)/70)#angle est de 0 quand on se trouve dans la trajectoire de la porte
         print("le drone est au niveau de la porte n°",porte_actuelle, "\n")
-        hauteur_sup=1
+        
+        hauteur_sup= obstacles(porte_actuelle).height
+        
         hauteur_inf=1
         if porte_actuelle==2:
             type_porte=2

@@ -10,6 +10,8 @@ from subsys_tello_actuators import TelloActuators
 from subsys_visual_control import VisualControl
 from parameters import MODE, pygame
 from DJITelloPy.djitellopy.tello import Tello
+import subsys_environment
+import subsys_obstacles
 
 
 
@@ -24,6 +26,8 @@ def setup():
     MarkersDetected.setup()
     SelectTargetMarker.setup()
 
+    obstacles = obstacles.__init__(subsys_environment.environment._get_list_obstacle_id())
+
 
 def run(compteur):
     # run keyboard subsystem
@@ -32,7 +36,7 @@ def run(compteur):
     frame, drone_status = TelloSensors.run(mode_status)
     markers_status, frame = MarkersDetected.run(frame)
     marker_status = SelectTargetMarker.run(frame, markers_status, DRONE_POS, offset=(-6.5, 0))#offset à définir le jour J
-    rc_status_2 = VisualControl.run(marker_status, drone_status,compteur)
+    rc_status_2 = VisualControl.run(marker_status, drone_status,compteur, obstacles)
 
     if key_status.is_pressed:
         rc_status = rc_status_1
