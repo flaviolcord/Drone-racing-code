@@ -3,7 +3,7 @@ from parameters import cv2
 # output of subsystem
 
 
-class environment:
+class Environment:
     #--------------- Obstacle ----------------------
 
     # Index obstacle dimensions
@@ -76,14 +76,14 @@ class environment:
 
     @classmethod
     def _get_obstacle_dimensions(cls, id):
-        _type_obstacle = environment.list_obstacles(id)
-        _dimensions = environment.obstacle_dimensions(_type_obstacle)
+        _type_obstacle = Environment.list_obstacles(id)
+        _dimensions = Environment.obstacle_dimensions(_type_obstacle)
 
         return _dimensions
 
     @classmethod
     def _get_list_obstacle_id(cls):
 
-        return environment.list_obstacles
+        return Environment.list_obstacles
 
     

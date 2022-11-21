@@ -1,9 +1,9 @@
 from parameters import cv2
-from subsys_environment import environment
+from subsys_environment import Environment
 
 # output of subsystem
 
-class obstacles:
+class Obstacles:
     list_obstacles = []
 
     def __init__(cls, list_ids):
@@ -44,12 +44,12 @@ class obstacle:
 
     def _get_dimension_values(cls):
 
-        dimensions = environment._get_obstacle_dimensions(cls.id)
+        dimensions = Environment._get_obstacle_dimensions(cls.id)
         
-        cls.height = dimensions(environment.INDEX_DIMENSIONS_HEIGHT)
-        cls.width = dimensions(environment.INDEX_DIMENSIONS_WIDTH)
-        cls.orientation = dimensions(environment.INDEX_DIMENSIONS_ORIENTATION)
-        cls.offset = dimensions(environment.INDEX_DIMENSIONS_OFFSET)
+        cls.height = dimensions(Environment.INDEX_DIMENSIONS_HEIGHT)
+        cls.width = dimensions(Environment.INDEX_DIMENSIONS_WIDTH)
+        cls.orientation = dimensions(Environment.INDEX_DIMENSIONS_ORIENTATION)
+        cls.offset = dimensions(Environment.INDEX_DIMENSIONS_OFFSET)
 
 
     @classmethod
