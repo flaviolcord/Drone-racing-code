@@ -1,37 +1,49 @@
 from parameters import cv2
-from subsys_environment import environment
+from subsys_environment import Environment
 
 # output of subsystem
 
-class obstacles:
+class Obstacles:
     list_obstacles = []
 
-    def __init__(cls, list_ids):
-        
-        for id in list_ids:
-            obs = obstacle.__init__(id)
-            cls.list_obstacles.append(obs)
+    def __init__(self, list_ids):
 
-    @classmethod
-    def _get_obstacle(cls, id):
-        return cls.list_obstacles[id]
+        for id in range(len(list_ids)):
+            obs = Obstacle(id)
+            self.list_obstacles.append(obs)
+
+    def get_list_obstacles(self):
+        return self.list_obstacles
+
+    def get_obstacle(self, id):
+        return self.list_obstacles[id]
 
 # subsystem
-class obstacle:
+class Obstacle:
+
     #default values
     id = -1
+    obs_type = -1
     height = 0.0
     width = 0.0
-    orientation = 0 # orientation = {-1 , 0, 1}, -1 left, 0 unoriented, 1 right
-    offset = [-4, 0] #ObS: estudar sinal
+    orientation = 0 
+    offset = [-4, 0] 
 
-    @classmethod
-    def __init__(cls, id):
-        cls.id = id
-        cls._get_dimension_values()
+
+    def __init__(self, id):
+        self.id = id
+
+        dimensions = Environment.get_obstacle_dimensions(id)
+        
+        self.obs_type = dimensions[Environment.INDEX_TYPE]
+        self.height = dimensions[Environment.INDEX_HEIGHT]
+        self.width = dimensions[Environment.INDEX_WIDTH]
+        self.orientation = dimensions[Environment.INDEX_ORIENTATION]
+        self.offset = dimensions[Environment.INDEX_OFFSET]
 
     @classmethod
     def setup(cls):
+        Environment.get_obstacles_ids()
         pass
 
     @classmethod
@@ -42,23 +54,7 @@ class obstacle:
     def stop(cls):
         pass
 
-    def _get_dimension_values(cls):
-
-        dimensions = environment._get_obstacle_dimensions(cls.id)
-        
-        cls.height = dimensions(environment.INDEX_DIMENSIONS_HEIGHT)
-        cls.width = dimensions(environment.INDEX_DIMENSIONS_WIDTH)
-        cls.orientation = dimensions(environment.INDEX_DIMENSIONS_ORIENTATION)
-        cls.offset = dimensions(environment.INDEX_DIMENSIONS_OFFSET)
-
-
-    @classmethod
-    def _get_offset(cls):
-
-        # Incorrect !
-        _offset = (int(obstacle.offset[0]*obstacle.width), int(obstacle.offset[1]*obstacle.height))
-
-        return _offset
+    def _get_offset(self):
         pass
 
 

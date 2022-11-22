@@ -23,8 +23,8 @@ class marker_status:
     m_distance = 0
 
     #Test
-    drone_crossing = False
     last_target = -1
+    
 
     height = 0
     width = 0
@@ -58,7 +58,9 @@ class SelectTargetMarker:
         pass
 
     @classmethod
-    def run(cls, frame, markers, drone_pos, offset=(0, 0)):
+    def run(cls, frame, markers, drone_pos, list_obstacles):
+
+        offset=(-4, 0)
 
         cls.drone_pos = drone_pos
         id, corners = cls._get_marker_with_min_id(markers)

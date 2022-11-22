@@ -8,6 +8,8 @@ from subsys_select_target_marker import SelectTargetMarker
 from subsys_tello_sensors import TelloSensors, drone_status
 from subsys_tello_actuators import TelloActuators
 from subsys_visual_control import VisualControl
+from subsys_environment import Environment
+from subsys_obstacles import Obstacles, Obstacle
 
 
 def setup():
@@ -21,15 +23,15 @@ def setup():
     MarkersDetected.setup()
     SelectTargetMarker.setup()
 
+def run(obstacles):
 
-def run():
     # run keyboard subsystem
     rc_status_1, key_status, mode_status = ReadKeyboard.run(rc_threshold=20)
     # get keyboard subsystem
     frame, drone_status = TelloSensors.run(mode_status)
     markers_status, frame = MarkersDetected.run(frame)
     marker_status = SelectTargetMarker.run(
-        frame, markers_status, DRONE_POS, offset=(-4, 0))
+        frame, markers_status, DRONE_POS, obstacles.get_list_obstacles())
     rc_status_2 = VisualControl.run(marker_status, drone_status)
 
     if key_status.is_pressed:
@@ -71,9 +73,13 @@ def stop():
 
 
 if __name__ == "__main__":
+
+    # Object obstacles
+    obstacles = Obstacles(Environment.get_obstacles_ids())
+
     setup()
 
     while run_status.value:
-        run()
+        run(obstacles)
 
     stop()
