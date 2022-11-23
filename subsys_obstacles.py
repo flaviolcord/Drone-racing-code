@@ -27,7 +27,7 @@ class Obstacle:
     height = 0.0
     width = 0.0
     orientation = 0 
-    offset = [-4, 0] 
+    offset = [-2, 0] 
 
 
     def __init__(self, id):
@@ -40,6 +40,15 @@ class Obstacle:
         self.width = dimensions[Environment.INDEX_WIDTH]
         self.orientation = dimensions[Environment.INDEX_ORIENTATION]
         self.offset = dimensions[Environment.INDEX_OFFSET]
+
+        # Correction target point for obstacles type 2
+        signal = -1  if (self.obs_type == Environment.TURN_RIGHT_TYPE) else 1
+        self.offset[0] *= signal
+
+    # Gets
+    def get_type(self): return self.obs_type
+
+    def get_offset(self): return self.offset
 
     @classmethod
     def setup(cls):

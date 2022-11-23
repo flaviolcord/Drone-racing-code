@@ -26,12 +26,12 @@ def setup():
 def run(obstacles):
 
     # run keyboard subsystem
-    rc_status_1, key_status, mode_status = ReadKeyboard.run(rc_threshold=20)
+    rc_status_1, key_status, mode_status = ReadKeyboard.run(rc_threshold=70)
     # get keyboard subsystem
     frame, drone_status = TelloSensors.run(mode_status)
     markers_status, frame = MarkersDetected.run(frame)
     marker_status = SelectTargetMarker.run(
-        frame, markers_status, DRONE_POS, obstacles.get_list_obstacles())
+        frame, markers_status, DRONE_POS, obstacles)
     rc_status_2 = VisualControl.run(marker_status, drone_status)
 
     if key_status.is_pressed:

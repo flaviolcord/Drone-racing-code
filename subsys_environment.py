@@ -58,7 +58,7 @@ class Environment:
     obstacle_dimensions = [ARCH_DIMENSIONS, TV_DIMENSIONS, TURN_LEFT_DIMENSIONS, TURN_RIGHT_DIMENSIONS]
 
     # Circuit
-    list_obstacles = [1, 3, 0, 3] # Positions of the list = id marker, Value of each position = obstacle type {0, 1, 3}
+    list_obstacles = [2, 3, 0, 0] # Positions of the list = id marker, Value of each position = obstacle type {0, 1, 3}
 
     # Marker
     MARKER_HEIGHT = 0.0

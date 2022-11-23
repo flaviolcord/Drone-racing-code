@@ -1,4 +1,5 @@
 from parameters import RED, cv2, np
+from subsys_environment import Environment
 # output of subsystem
 
 
@@ -49,6 +50,11 @@ class marker_status:
 
 
 class SelectTargetMarker:
+
+    # Test
+    list_values = []
+    bool_values = True
+
     @classmethod
     def setup(cls):
         marker_status.reset()
@@ -58,9 +64,7 @@ class SelectTargetMarker:
         pass
 
     @classmethod
-    def run(cls, frame, markers, drone_pos, list_obstacles):
-
-        offset=(-4, 0)
+    def run(cls, frame, markers, drone_pos, obstacles):
 
         cls.drone_pos = drone_pos
         id, corners = cls._get_marker_with_min_id(markers)
@@ -68,8 +72,18 @@ class SelectTargetMarker:
             marker_status.reset()
             return marker_status
 
+        # Get offset for the current obstacle
+        print(id)
+
+        # Checks if id is not out range (17)
+        if id <= Environment.get_nb_obstacles():
+            offset = obstacles.get_obstacle(id).get_offset()
+        else:
+            offset = [-4, 0]
+
         br, bl, tl, tr = corners[0], corners[1], corners[2], corners[3]
         center_pt = cls._get_midpoint([br, bl, tl, tr])
+
         # get symmetry axes
         left_pt = cls._get_midpoint([bl, tl])
         right_pt = cls._get_midpoint([br, tr])
@@ -81,6 +95,18 @@ class SelectTargetMarker:
 
         h_angle = cls._angle_between(left_pt, right_pt)
         v_angle = cls._angle_between(top_pt, bottom_pt, vertical=True)
+
+        #-------------- Debug -----------------
+        # if id == 0:
+        #     cls.list_values.append([height, width, h_angle, v_angle])
+
+        # if id == 1 and cls.bool_values:
+        #     for i in range (len(cls.list_values)):
+        #         print(cls.list_values[i])
+        #     cls.bool_values = False
+        
+
+
 
         cls.offset = (int(offset[0]*width), int(offset[1]*height))
         cls.marker_pos = (center_pt[0] + cls.offset[0],
