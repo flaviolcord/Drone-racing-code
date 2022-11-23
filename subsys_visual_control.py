@@ -9,10 +9,15 @@ from subsys_environment import Environment
 
 # output of subsystem
 
+<<<<<<< Updated upstream
 # Compteur values
 COMPTEUR_VALUE_MIN = 20 # Etudier ces valeurs
 COMPTEUR_VALUE_MAX = 50
 
+=======
+nb_gate=14
+id=0
+>>>>>>> Stashed changes
 class rc_status:#au debut tout à l'arret
     a = 0
     b = 0
@@ -94,6 +99,7 @@ class VisualControl:
         obst = obstacles.get_obstacle(porte_actuelle)
         hauteur_obs = obst.get_height()
         type = obst.get_type()
+<<<<<<< Updated upstream
 
         print("hauteur de la porte:", hauteur_obs)
 
@@ -102,8 +108,16 @@ class VisualControl:
                 print("MONTER",drone_status.hauteur)
                 rc_status.c=17 #pourcentage vitesse de montée 
         if type != Environment.TV_TYPE and drone_status.hauteur > hauteur_obs:
+=======
+        print("type", type,"\n")
+        print("hauteur de la porte:",hauteur_obs)
+        if type==1 and drone_status.hauteur<hauteur_obs:
+                print("MONTER",drone_status.hauteur)
+                rc_status.c=50 #pourcentage vitesse de montée 
+        if (type==0 or type==2 or type==3) and drone_status.hauteur>hauteur_obs:
+>>>>>>> Stashed changes
             print("MONTER",drone_status.hauteur)
-            rc_status.c=-15
+            rc_status.c=-50
         return rc_status
 
         
