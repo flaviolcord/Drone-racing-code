@@ -39,7 +39,10 @@ class Obstacle:
         self.height = dimensions[Environment.INDEX_HEIGHT]
         self.width = dimensions[Environment.INDEX_WIDTH]
         self.orientation = dimensions[Environment.INDEX_ORIENTATION]
-        self.offset = dimensions[Environment.INDEX_OFFSET]
+        # self.offset = dimensions[Environment.INDEX_OFFSET]
+
+        # Get offset
+        self.offset[0] = Environment.get_offset(id)
 
         # Correction target point for obstacles type 2
         signal = -1  if (self.obs_type == Environment.TURN_RIGHT_TYPE) else 1
@@ -47,8 +50,9 @@ class Obstacle:
 
     # Gets
     def get_type(self): return self.obs_type
-
+    def get_height(self): return self.height
     def get_offset(self): return self.offset
+    def get_type(self): return self.obs_type
 
     @classmethod
     def setup(cls):

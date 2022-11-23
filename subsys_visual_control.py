@@ -79,9 +79,9 @@ class VisualControl:
             rc_status.b = rb_threshold - int(rb_threshold * abs(phi)/70)#angle est de 0 quand on se trouve dans la trajectoire de la porte
         print("le drone est au niveau de la porte n°",porte_actuelle, "\n")
         
-        hauteur_obs= obstacles(porte_actuelle).height
-        #type=obstacles(porte_actuelle).t#type de porte fixé dans l'environnement
-        type=subsys_environment.Environment.type
+        obst = obstacles.get_obstacle(porte_actuelle)
+        hauteur_obs = obst.get_height()
+        type = obst.get_type()
         print("hauteur de la porte:",hauteur_obs)
         if type=="h" and drone_status.hauteur<hauteur_obs:
                 print("MONTER",drone_status.hauteur)

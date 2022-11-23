@@ -72,13 +72,11 @@ class SelectTargetMarker:
             marker_status.reset()
             return marker_status
 
-        # Get offset for the current obstacle
-        print(id)
-
         # Checks if id is not out range (17)
         if id <= Environment.get_nb_obstacles():
             offset = obstacles.get_obstacle(id).get_offset()
         else:
+            # Valeur par default
             offset = [-4, 0]
 
         br, bl, tl, tr = corners[0], corners[1], corners[2], corners[3]
@@ -104,9 +102,6 @@ class SelectTargetMarker:
         #     for i in range (len(cls.list_values)):
         #         print(cls.list_values[i])
         #     cls.bool_values = False
-        
-
-
 
         cls.offset = (int(offset[0]*width), int(offset[1]*height))
         cls.marker_pos = (center_pt[0] + cls.offset[0],
@@ -147,14 +142,15 @@ class SelectTargetMarker:
                     target_id = id
                     target_corners = markers.corners[i][0]
 
-        if marker_status.m_distance > 200 and marker_status.m_distance < 230:
-            for i in range(len(markers.ids)):
-                id = markers.ids[i][0]
-                if (target_id + 1) == id:
-                    target_id = id
-                    target_corners = markers.corners[i][0]
+        #--------- Code pour savoir quand changer de marker par rapport la distance à la cible
+        # if marker_status.m_distance > 200 and marker_status.m_distance < 230:
+        #     for i in range(len(markers.ids)):
+        #         id = markers.ids[i][0]
+        #         if (target_id + 1) == id:
+        #             target_id = id
+        #             target_corners = markers.corners[i][0]
 
-        marker_status.last_target = target_id
+        # marker_status.last_target = target_id
 
         return target_id, target_corners
 

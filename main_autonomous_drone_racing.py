@@ -26,17 +26,14 @@ def setup():
     MarkersDetected.setup()
     SelectTargetMarker.setup()
 
-    #obstacles = obstacles.__init__(Environment._get_list_obstacle_id())
-
-
-def run(compteur):
+def run(compteur, obstacles):
     # run keyboard subsystem
     rc_status_1, key_status, mode_status = ReadKeyboard.run(rc_threshold=20)
     # get keyboard subsystem
     frame, drone_status = TelloSensors.run(mode_status)
     markers_status, frame = MarkersDetected.run(frame)
-    marker_status = SelectTargetMarker.run(frame, markers_status, DRONE_POS, offset=(-6.5, 0))#offset à définir le jour J
-    rc_status_2 = VisualControl.run(marker_status, drone_status,compteur, Obstacles)
+    marker_status = SelectTargetMarker.run(frame, markers_status, DRONE_POS, obstacles)#offset à définir le jour J
+    rc_status_2 = VisualControl.run(marker_status, drone_status,compteur, obstacles)
 
     if key_status.is_pressed:
         rc_status = rc_status_1
@@ -62,9 +59,7 @@ def run(compteur):
                 m_angle=int(marker_status.m_angle * RAD2DEG),
                 m_distance=marker_status.m_distance,
                 m_height=marker_status.height,
-                m_width=marker_status.width,
-                haut_angle=marker_status.haut_angle,
-                offset=marker_status.offset_longueur
+                m_width=marker_status.width
                 )
 
     time.sleep(1 / FPS)
@@ -78,13 +73,18 @@ def stop():
     MarkersDetected.stop()
     SelectTargetMarker.stop()
 compteur=[0,0,0,0,0,0,0,0,0,0,0]
+
+#-------------------------- MAIN ----------------------------------------------------
+
 if __name__ == "__main__":
     setup()
+     # Object obstacles
+    obstacles = Obstacles(Environment.get_obstacles_ids())
 
     while run_status.value:
        
         print("compteur",compteur,"\n")
-        id_percu=run(compteur)
+        id_percu=run(compteur, obstacles)
         if id_percu==-1:
             id_percu=10
         if id_percu>=0 and id_percu<=10:
