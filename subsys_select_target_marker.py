@@ -1,5 +1,6 @@
 from tkinter import HORIZONTAL
 from parameters import RED, cv2, np
+import subsys_environment
 
 # output of subsystem
 
@@ -80,7 +81,7 @@ class SelectTargetMarker:
 
         h_angle = cls._angle_between(left_pt, right_pt)
         v_angle = cls._angle_between(top_pt, bottom_pt, vertical=True)
-        offset_longueur=[-4,-4,-4,-4,-4,-3,-4,-4,-4,-4,-3]#attention dépassement nb de porte
+        offset_longueur=subsys_environment.Environment.liste_ofset#attention dépassement nb de porte
         if id>=0 and id<10:
             bon_id=id
         else:

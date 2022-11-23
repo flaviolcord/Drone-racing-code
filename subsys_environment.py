@@ -5,7 +5,9 @@ from parameters import cv2
 
 class Environment:
     #--------------- Obstacle ----------------------
-
+    #Maëlle
+    liste_ofset=[-4,-4,-4,-4,-4,-3,-4,-4,-4,-4,-3]
+    Pourcentage_vitesse=80
     # Index obstacle dimensions
     # Allocation index for lists obstacle_dimensions = []
     INDEX_DIMENSIONS_HEIGHT = 0
@@ -17,7 +19,7 @@ class Environment:
     obstacle_dimensions = []
 
     # ARCH - type 0
-    ARCH_HEIGHT = 0.0
+    ARCH_HEIGHT = 1.0
     ARCH_WIDTH = 0.0
     ARCH_ORIENTATION = 0
     ARCH_OFFSET = [-4, 0]
@@ -25,7 +27,7 @@ class Environment:
     ARCH_DIMENSIONS = [ARCH_HEIGHT, ARCH_WIDTH, ARCH_ORIENTATION, ARCH_OFFSET]
 
     # TV - type 1
-    TV_HEIGHT = 0.0
+    TV_HEIGHT = 3.0
     TV_WIDTH = 0.0
     TV_ORIENTATION = 0
     TV_OFFSET = [-4, 0]
@@ -33,7 +35,7 @@ class Environment:
     TV_DIMENSIONS = [TV_HEIGHT, TV_WIDTH, TV_ORIENTATION, TV_OFFSET]
 
     # TURN - type 2 (Left, orientation = -1)
-    TURN_L_HEIGHT = 0.0
+    TURN_L_HEIGHT = 1.0
     TURN_L_WIDTH = 0.0
     TURN_L_ORIENTATION = -1
     TURN_L_OFFSET = [-4, 0]
@@ -41,7 +43,7 @@ class Environment:
     TURN_L_DIMENSIONS = [TURN_L_HEIGHT, TURN_L_WIDTH, TURN_L_ORIENTATION, TURN_L_OFFSET]
 
     # TURN - type 3 (Right, orientation = 1)
-    TURN_R_HEIGHT = 0.0
+    TURN_R_HEIGHT = 1.0
     TURN_R_WIDTH = 0.0
     TURN_R_ORIENTATION = 1
     TURN_R_OFFSET = [-4, 0]

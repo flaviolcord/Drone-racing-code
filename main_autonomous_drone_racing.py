@@ -26,7 +26,7 @@ def setup():
     MarkersDetected.setup()
     SelectTargetMarker.setup()
 
-    obstacles = obstacles.__init__(Environment._get_list_obstacle_id())
+    #obstacles = obstacles.__init__(Environment._get_list_obstacle_id())
 
 
 def run(compteur):
