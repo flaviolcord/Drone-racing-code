@@ -1,8 +1,7 @@
-from tkinter import HORIZONTAL
 from parameters import RED, cv2, np
-import subsys_environment
-
+from subsys_environment import Environment
 # output of subsystem
+
 
 class marker_status:
     id = -1
@@ -15,6 +14,7 @@ class marker_status:
     # Vertical axis
     left_pt = (0, 0)
     right_pt = (0, 0)
+
     # Horizontal angle
     h_angle = 0
     # Vertical angle
@@ -22,15 +22,14 @@ class marker_status:
     # angle and distance between marker and drone
     m_angle = 0
     m_distance = 0
-    #test
-    drone_crossing=False
-    last_target=-1
+
+    #Test
+    last_target = -1
+    
 
     height = 0
     width = 0
-    haut_angle=0
-    offset_longueur=1
-    
+
     @classmethod
     def reset(cls):
         cls.id = -1
@@ -46,11 +45,16 @@ class marker_status:
         cls.m_distance = 0
         cls.height = 0
         cls.width = 0
-        cls.haut_angle=0
 
 # subsystem
 
+
 class SelectTargetMarker:
+
+    # Test
+    list_values = []
+    bool_values = True
+
     @classmethod
     def setup(cls):
         marker_status.reset()
@@ -60,16 +64,26 @@ class SelectTargetMarker:
         pass
 
     @classmethod
-    def run(cls, frame, markers, drone_pos, offset=(0, 0)):
+    def run(cls, frame, markers, drone_pos, obstacles):
 
         cls.drone_pos = drone_pos
-        id, corners= cls._get_marker_with_min_id(markers)
+        id, corners = cls._get_marker_with_min_id(markers)
         if id == -1:
             marker_status.reset()
             return marker_status
 
+        # Get offset for the current obstacle
+        print(id)
+
+        # Checks if id is not out range (17)
+        if id <= Environment.get_nb_obstacles():
+            offset = obstacles.get_obstacle(id).get_offset()
+        else:
+            offset = [-4, 0]
+
         br, bl, tl, tr = corners[0], corners[1], corners[2], corners[3]
         center_pt = cls._get_midpoint([br, bl, tl, tr])
+
         # get symmetry axes
         left_pt = cls._get_midpoint([bl, tl])
         right_pt = cls._get_midpoint([br, tr])
@@ -81,20 +95,27 @@ class SelectTargetMarker:
 
         h_angle = cls._angle_between(left_pt, right_pt)
         v_angle = cls._angle_between(top_pt, bottom_pt, vertical=True)
-        offset_longueur=subsys_environment.Environment.liste_ofset#attention dépassement nb de porte
-        if id>=0 and id<10:
-            bon_id=id
-        else:
-            bon_id=1
-        print("offset prévu",offset_longueur[bon_id],"\n")
-        cls.offset = (int(offset_longueur[bon_id]*width), int(offset[1]*height))
+
+        #-------------- Debug -----------------
+        # if id == 0:
+        #     cls.list_values.append([height, width, h_angle, v_angle])
+
+        # if id == 1 and cls.bool_values:
+        #     for i in range (len(cls.list_values)):
+        #         print(cls.list_values[i])
+        #     cls.bool_values = False
+        
+
+
+
+        cls.offset = (int(offset[0]*width), int(offset[1]*height))
         cls.marker_pos = (center_pt[0] + cls.offset[0],
                           center_pt[1] + cls.offset[1])
         m_angle = cls._angle_between(drone_pos,  cls.marker_pos, vertical=True)
-       
-        
         m_distance = cls._length_segment(drone_pos, cls.marker_pos)
+
         cls.draw(frame)
+
         # update output
         marker_status.id = id
         marker_status.corners = corners
@@ -109,35 +130,31 @@ class SelectTargetMarker:
         marker_status.m_distance = m_distance
         marker_status.height = height
         marker_status.width = width
-        marker_status.offset_longueur=offset_longueur[bon_id]
-       
         return marker_status
 
     @staticmethod
     def _get_marker_with_min_id(markers):
         target_id = -1
         target_corners = []
-        
 
         if markers.ids is None:
             return target_id, target_corners
 
-        for i in range(len(markers.ids)):#se diriger vers le bon id ne pas sauter des portes
+        for i in range(len(markers.ids)):
             id = markers.ids[i][0]
             if id < target_id or target_id == -1:
-                #target_id = id
-                #target_corners = markers.corners[i][0]
-
-                if not(marker_status.last_target>id):
+                if not(marker_status.last_target > id) :
                     target_id = id
                     target_corners = markers.corners[i][0]
-        if marker_status.m_distance>200 and marker_status.m_distance<235:#attention!! A modifier
+
+        if marker_status.m_distance > 200 and marker_status.m_distance < 230:
             for i in range(len(markers.ids)):
-                id=markers.ids[i][0]
-                if (target_id +1)==id:
-                    target_id=id
-                    target_corners=markers.corners[i][0]
-        marker_status.last_target=target_id
+                id = markers.ids[i][0]
+                if (target_id + 1) == id:
+                    target_id = id
+                    target_corners = markers.corners[i][0]
+
+        marker_status.last_target = target_id
 
         return target_id, target_corners
 
@@ -157,14 +174,6 @@ class SelectTargetMarker:
     def _angle_between(p1, p2, vertical=False):
         dx = p1[0]-p2[0]
         dy = p1[1]-p2[1]
-        if not vertical:  # angle betwenn Horizantal axis and segment (p1,p2)
-            return np.arctan(-dy/(dx+0.000001))
-        else:  # angle betwenn vertical axis and segment (p1,p2)
-            return np.arctan(-dx/(dy+0.000001))
-    @staticmethod
-    def _angle_between_h(p1, p2, vertical=False):
-        dy = p1[0]-p2[0]
-        dx = -(p1[1]-p2[1])
         if not vertical:  # angle betwenn Horizantal axis and segment (p1,p2)
             return np.arctan(-dy/(dx+0.000001))
         else:  # angle betwenn vertical axis and segment (p1,p2)
