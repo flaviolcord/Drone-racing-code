@@ -5,6 +5,7 @@ from parameters import cv2
 
 class Environment:
 
+
     list_offset=[-4,-4,-4,-4,-4,-3,-4,-4,-4,-4,-3]
     Pourcentage_vitesse=80
 
@@ -31,13 +32,13 @@ class Environment:
     ARCH_DIMENSIONS = [ARCH_TYPE, ARCH_HEIGHT, ARCH_WIDTH, ARCH_ORIENTATION, ARCH_OFFSET]
 
     # TV - type 1
-    TV__TYPE = 1
+    TV_TYPE = 1
     TV_HEIGHT = 3.0
     TV_WIDTH = 0.0
     TV_ORIENTATION = 0
     TV_OFFSET = [-4, 0]
 
-    TV_DIMENSIONS = [TV__TYPE, TV_HEIGHT, TV_WIDTH, TV_ORIENTATION, TV_OFFSET]
+    TV_DIMENSIONS = [TV_TYPE, TV_HEIGHT, TV_WIDTH, TV_ORIENTATION, TV_OFFSET]
 
     # TURN - type 2
     TURN_LEFT_TYPE = 2
@@ -62,7 +63,7 @@ class Environment:
     obstacle_dimensions = [ARCH_DIMENSIONS, TV_DIMENSIONS, TURN_LEFT_DIMENSIONS, TURN_RIGHT_DIMENSIONS]
 
     # Circuit
-    list_obstacles = [2, 3, 0, 0, 0, 0, 0, 0, 0] # Positions of the list = id marker, Value of each position = obstacle type {0, 1, 3}
+    list_obstacles = [0, 0, 0, 0] # Positions of the list = id marker, Value of each position = obstacle type {0, 1, 3}
 
     # Marker
     MARKER_HEIGHT = 0.0

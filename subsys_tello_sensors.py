@@ -1,7 +1,7 @@
 from parameters import ENV, MODE, RUN, cv2
 from DJITelloPy.djitellopy.tello import Tello
 import time
-from subsys_visual_control import id
+#from subsys_visual_control import id
 # output of subsystem
 
 class drone_status:

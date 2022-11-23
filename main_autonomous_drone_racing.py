@@ -13,7 +13,8 @@ from DJITelloPy.djitellopy.tello import Tello
 from subsys_environment import Environment
 from subsys_obstacles import Obstacles
 
-
+NB_ITERATION = 1000
+DISTANCE_LAST_MARKER = 1000 # 1 m
 
 def setup():
     ENV.status = ENV.SIMULATION # met 2 éléments de la classe ENV à égalité
@@ -29,6 +30,7 @@ def setup():
 def run(compteur, obstacles):
     # run keyboard subsystem
     rc_status_1, key_status, mode_status = ReadKeyboard.run(rc_threshold=20)
+    print(mode_status.value)
     # get keyboard subsystem
     frame, drone_status = TelloSensors.run(mode_status)
     markers_status, frame = MarkersDetected.run(frame)
@@ -63,7 +65,7 @@ def run(compteur, obstacles):
                 )
 
     time.sleep(1 / FPS)
-    return marker_status.id
+    return marker_status.id, mode_status
 
 def stop():
     Display.stop()
@@ -72,31 +74,46 @@ def stop():
     ReadKeyboard.stop()
     MarkersDetected.stop()
     SelectTargetMarker.stop()
-compteur=[0,0,0,0,0,0,0,0,0,0,0]
 
 #-------------------------- MAIN ----------------------------------------------------
 
 if __name__ == "__main__":
     setup()
+    compteur=[]
+    # Get zeros vector with size of the number the markers
+    for i in range(Environment.get_nb_obstacles()):
+        compteur.append(0)
+
+    # Last element for id = -1
+    compteur.append(0)
+    
      # Object obstacles
     obstacles = Obstacles(Environment.get_obstacles_ids())
 
     while run_status.value:
        
-        print("compteur",compteur,"\n")
-        id_percu=run(compteur, obstacles)
-        if id_percu==-1:
-            id_percu=10
-        if id_percu>=0 and id_percu<=10:
-            compteur[id_percu]=compteur[id_percu]+1
-            for j in range(len(compteur)):
-                if j!=id_percu and compteur[j]>0:
-                    compteur[j]=compteur[j]-1
-            print("iddd",compteur,"\n")
-        if id_percu==-1 and compteur[2]>100 and compteur[1]>100:
-            Tello.move_forward(1000)#distance à modifier le jour J
-            time.sleep(2)
-            stop()
+        #print("compteur",compteur,"\n")
+
+        #Run
+        id_percu, _mode_status = run(compteur, obstacles)
+
+        # Condition always false
+        if(_mode_status.value == MODE.FLIGHT):
+            if id_percu==-1 and compteur[Environment.get_nb_obstacles()] > NB_ITERATION:
+                Tello.move_forward(DISTANCE_LAST_MARKER)#distance à modifier le jour J
+                time.sleep(2)
+                stop()
+
+            # Ajouter ou retirer du compteur
+            if id_percu == -1:
+                id_percu = Environment.get_nb_obstacles()
+
+            if id_percu >= 0 and id_percu <= len(compteur):
+                compteur[id_percu] = compteur[id_percu]+1
+                for j in range(Environment.get_nb_obstacles()):
+                    if j != id_percu and compteur[j] > 0:
+                        compteur[j] = compteur[j]-1
+                print("iddd",compteur,"\n")
     
     stop()
 
