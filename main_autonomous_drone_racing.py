@@ -17,7 +17,7 @@ NB_ITERATION = 1000
 DISTANCE_LAST_MARKER = 1000 # 1 m
 
 def setup():
-    ENV.status = ENV.SIMULATION # met 2 éléments de la classe ENV à égalité
+    ENV.status = ENV.REAL# met 2 éléments de la classe ENV à égalité
     TelloSensors.setup()
     TelloActuators.setup(TelloSensors.TELLO)
     ReadCAM.setup()
@@ -107,11 +107,12 @@ if __name__ == "__main__":
             if id_percu == -1:
                 id_percu = Environment.get_nb_obstacles()
 
-            if id_percu >= 0 and id_percu < Environment.get_nb_obstacles():
+            if id_percu >= 0 and id_percu <= Environment.get_nb_obstacles():
                 compteur[id_percu] = compteur[id_percu]+1
                 for j in range(Environment.get_nb_obstacles()):
                     if j != id_percu and compteur[j] > 0 :
                         compteur[j] = compteur[j]-1
+            print(compteur)
     
     stop()
 

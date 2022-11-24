@@ -40,7 +40,7 @@ class TelloSensors:
         
         if mode_status.value == MODE.TAKEOFF:
             cls.TELLO.takeoff()
-            cls.TELLO.move_up(10)#à modifier le jour J
+            cls.TELLO.move_up(20)#à modifier le jour J
             mode_status.value = MODE.FLIGHT
         elif mode_status.value == MODE.LAND:
             cls.TELLO.land()

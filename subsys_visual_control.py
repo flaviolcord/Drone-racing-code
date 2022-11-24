@@ -14,8 +14,8 @@ from subsys_read_keyboard import mode_status
 COMPTEUR_VALUE_MIN = 20 # Etudier ces valeurs
 COMPTEUR_VALUE_MAX = 50
 
-COMPTEUR_LOST_MARKER = 80
-COMPTEUR_LAND = 80
+COMPTEUR_LOST_MARKER = 20
+COMPTEUR_LAND = 150
 
 class rc_status:#au debut tout à l'arret
     a = 0
@@ -24,8 +24,8 @@ class rc_status:#au debut tout à l'arret
     d = 0
    
 class VisualControl:
-    KP_LR_CTRL = 0.3
-    KP_YAW_CTRL = 0.7
+    KP_LR_CTRL = 0.1#a modifier le jour J
+    KP_YAW_CTRL = 0.4
     cmp = 0
     
     @classmethod
@@ -89,10 +89,10 @@ class VisualControl:
                     # Tourner pour trouver le marker 
                     #print("la prochaine porte à passer est:",idd,"\n")
                     if Environment.get_next_direction(porte_actuelle) >= 0 and drone_status.hauteur > 0 : #à changer en fonction de la porte suivant
-                        rc_status.d = 30
+                        rc_status.d = 60
                     if Environment.get_next_direction(porte_actuelle) < 0 and drone_status.hauteur > 0 : #à changer en réel
-                        rc_status.d = -30 #int(0.99*rc_status.d)    # yaw_velocity
-                    rc_status.a = int(0.99*rc_status.a)    # left_right_velocity
+                        rc_status.d = -60 #int(0.99*rc_status.d)    # yaw_velocity
+                    #rc_status.a = int(0.99*rc_status.a)    # left_right_velocity
                     # wait for the drone to pass the last Gate
 
                     return rc_status
@@ -110,27 +110,34 @@ class VisualControl:
         distance = marker_status.m_distance #distance au markeur
 
         # # Yaw velocity control
-        rc_status.d = int(cls.KP_YAW_CTRL * phi)
+        #rc_status.d = int(cls.KP_YAW_CTRL * phi)
 
         # Left/Right velocity control
-        DX = distance * np.sin(phi*DEG2RAD)
-        rc_status.a = int(cls.KP_LR_CTRL * DX)
+        # DX = distance * np.sin(phi*DEG2RAD)
+        # rc_status.a = int(cls.KP_LR_CTRL * DX)
         
         #------- Reduire les zig-zags
-        # if compteur[porte_actuelle] > 20 : #ce compteur évite de tourner trop tôt
-        # # Yaw velocity control
-        #     rc_status.d = int(cls.KP_YAW_CTRL * phi)
-        # # Left/Right velocity control
-        #     DX = distance * np.sin(phi*DEG2RAD)
-        #     rc_status.a = int(cls.KP_LR_CTRL * DX)
+        if compteur[porte_actuelle] > 20 : #ce compteur évite de tourner trop tôt
+        #Yaw velocity control
+            rc_status.d = int(cls.KP_YAW_CTRL * phi)
+        #Left/Right velocity control
+            DX = distance * np.sin(phi*DEG2RAD)
+            rc_status.a = int(cls.KP_LR_CTRL * DX)
+        else:
+            rc_status.a=0 
+            rc_status.b=30 # Check velocity !
+            rc_status.c=0
+            rc_status.d=0
+            return rc_status
 
         # Forward/Backward velocity control
         rb_threshold = Environment.Pourcentage_vitesse# pourcentage de vitesse fixé dans l'environnement
+        #rc_status.b = rb_threshold
         if rc_status.d < 15 :
             rc_status.b = rb_threshold
         else:
             rc_status.b = rb_threshold - int(rb_threshold * abs(phi)/70) #angle est de 0 quand on se trouve dans la trajectoire de la porte
-        #print("le drone est au niveau de la porte n°",porte_actuelle, "\n")
+        print("le drone est au niveau de la porte n°",porte_actuelle, "\n")
         
         # Get obstacle values : height and type
         obst = obstacles.get_obstacle(porte_actuelle)

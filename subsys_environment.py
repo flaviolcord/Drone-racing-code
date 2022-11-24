@@ -7,8 +7,8 @@ class Environment:
 
     offset_circle = -6
     list_offset=[-4,-4,-4,-4,-4,-3,-4,-4,-4,-4,-4, -4]
-    list_direction_next_marker = [-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1]
-    Pourcentage_vitesse=80
+    list_direction_next_marker = [-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1]#
+    Pourcentage_vitesse = 100
 
     #--------------- Obstacle ----------------------
 
@@ -25,7 +25,7 @@ class Environment:
 
     # ARCH - type 0
     ARCH_TYPE = 0
-    ARCH_HEIGHT = 1.0
+    ARCH_HEIGHT = 100
     ARCH_WIDTH = 0.0
     ARCH_ORIENTATION = 0
     ARCH_OFFSET = [-4, 0]
@@ -34,7 +34,7 @@ class Environment:
 
     # TV - type 1
     TV_TYPE = 1
-    TV_HEIGHT = 3.0
+    TV_HEIGHT = 300
     TV_WIDTH = 0.0
     TV_ORIENTATION = 0
     TV_OFFSET = [-4, 0]
@@ -43,7 +43,7 @@ class Environment:
 
     # TURN - type 2
     TURN_LEFT_TYPE = 2
-    TURN_LEFT_HEIGHT = 1.0
+    TURN_LEFT_HEIGHT = 150
     TURN_LEFT_WIDTH = 0.0
     TURN_LEFT_ORIENTATION = 0
     TURN_LEFT_OFFSET = [-4, 0]
@@ -52,7 +52,7 @@ class Environment:
 
     # TURN - type 3
     TURN_RIGHT_TYPE = 3
-    TURN_RIGHT_HEIGHT = 1.0
+    TURN_RIGHT_HEIGHT = 150
     TURN_RIGHT_WIDTH = 0.0
     TURN_RIGHT_ORIENTATION = 0
     TURN_RIGHT_OFFSET = [-4, 0]
@@ -64,7 +64,7 @@ class Environment:
     obstacle_dimensions = [ARCH_DIMENSIONS, TV_DIMENSIONS, TURN_LEFT_DIMENSIONS, TURN_RIGHT_DIMENSIONS]
 
     # Circuit
-    list_obstacles = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0] # Positions of the list = id marker, Value of each position = obstacle type {0, 1, 3}
+    list_obstacles = [0, 0, 0,0] # Positions of the list = id marker, Value of each position = obstacle type {0, 1, 3}
 
     # Marker
     MARKER_HEIGHT = 0.0
