@@ -2,11 +2,12 @@ from parameters import cv2
 
 # output of subsystem
 
-
 class Environment:
 
 
-    list_offset=[-4,-4,-4,-4,-4,-3,-4,-4,-4,-4,-3]
+    offset_circle = -6
+    list_offset=[-4,-4,-4,-4,-4,-3,-4,-4,-4,-4,-4, -4]
+    list_direction_next_marker = [-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1]
     Pourcentage_vitesse=80
 
     #--------------- Obstacle ----------------------
@@ -63,7 +64,7 @@ class Environment:
     obstacle_dimensions = [ARCH_DIMENSIONS, TV_DIMENSIONS, TURN_LEFT_DIMENSIONS, TURN_RIGHT_DIMENSIONS]
 
     # Circuit
-    list_obstacles = [1, 0] # Positions of the list = id marker, Value of each position = obstacle type {0, 1, 3}
+    list_obstacles = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0] # Positions of the list = id marker, Value of each position = obstacle type {0, 1, 3}
 
     # Marker
     MARKER_HEIGHT = 0.0
@@ -80,5 +81,6 @@ class Environment:
     def get_nb_obstacles(): return len(Environment.list_obstacles)
 
     def get_offset(id): return Environment.list_offset[id]
+    def get_next_direction(id): return Environment.list_direction_next_marker[id]
 
     

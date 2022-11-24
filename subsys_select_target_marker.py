@@ -74,7 +74,7 @@ class SelectTargetMarker:
             return marker_status
 
         # Checks if id is not out range (17)
-        if id < Environment.get_nb_obstacles():
+        if id > obstacles.get_last_obs_id() and id < Environment.get_nb_obstacles() :
             offset = obstacles.get_obstacle(id).get_offset()
             obstacles.set_last_obs_id(id) # Save last seen marker
         else:

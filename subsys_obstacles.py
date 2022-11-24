@@ -45,7 +45,7 @@ class Obstacle:
         # self.offset = dimensions[Environment.INDEX_OFFSET]
 
         # Get offset
-        self.offset[0] = Environment.get_offset(id)
+        self.offset[0] = -5 #Environment.get_offset(id)
 
         # Correction target point for obstacles type 2
         signal = -1  if (self.obs_type == Environment.TURN_RIGHT_TYPE) else 1
