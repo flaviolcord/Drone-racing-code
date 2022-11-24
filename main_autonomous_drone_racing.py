@@ -97,10 +97,11 @@ if __name__ == "__main__":
 
         # Condition always false
         if(_mode_status.value == MODE.FLIGHT):
-            if id_percu==-1 and compteur[Environment.get_nb_obstacles()] > NB_ITERATION:
-                Tello.move_forward(DISTANCE_LAST_MARKER)#distance à modifier le jour J
-                time.sleep(2)
-                stop()
+
+            # if id_percu==-1 and compteur[Environment.get_nb_obstacles()] > NB_ITERATION:
+            #     Tello.move_forward(DISTANCE_LAST_MARKER)#distance à modifier le jour J
+            #     time.sleep(2)
+            #     stop()
 
             # Ajouter ou retirer du compteur
             if id_percu == -1:
