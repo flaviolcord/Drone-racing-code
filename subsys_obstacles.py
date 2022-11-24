@@ -54,7 +54,8 @@ class Obstacle:
     def get_height(self): return self.height
 
     def get_offset(self): 
-        self.offset[0] = Environment.get_offset(self.id)
+        #self.offset[0] = Environment.get_offset(self.id)
+        self.offset[0]=-6
         return self.offset
         
     def get_type(self): return self.obs_type

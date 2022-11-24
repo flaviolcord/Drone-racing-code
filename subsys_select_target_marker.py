@@ -73,13 +73,17 @@ class SelectTargetMarker:
             marker_status.reset()
             return marker_status
 
-        # Checks if id is not out range (17)
-        if id > obstacles.get_last_obs_id() and id < Environment.get_nb_obstacles() :
+        # Get offset
+        if id >= 0 and id < Environment.get_nb_obstacles() :
             offset = obstacles.get_obstacle(id).get_offset()
-            obstacles.set_last_obs_id(id) # Save last seen marker
         else:
+            print("\n Entrou Id: ", id)
             # Valeur par default
             offset = [-4, 0]
+
+        # Save last id
+        if id > obstacles.get_last_obs_id() and id < Environment.get_nb_obstacles() :
+            obstacles.set_last_obs_id(id) # Save last seen marker
 
         br, bl, tl, tr = corners[0], corners[1], corners[2], corners[3]
         center_pt = cls._get_midpoint([br, bl, tl, tr])
