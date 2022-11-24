@@ -5,6 +5,7 @@ from subsys_environment import Environment
 
 class Obstacles:
     list_obstacles = []
+    last_obs_id = -1
 
     def __init__(self, list_ids):
 
@@ -12,11 +13,13 @@ class Obstacles:
             obs = Obstacle(id)
             self.list_obstacles.append(obs)
 
-    def get_list_obstacles(self):
-        return self.list_obstacles
+    # Gets
+    def get_list_obstacles(self): return self.list_obstacles
+    def get_obstacle(self, id): return self.list_obstacles[id]
+    def get_last_obs_id(self): return self.last_obs_id
 
-    def get_obstacle(self, id):
-        return self.list_obstacles[id]
+    # Sets
+    def set_last_obs_id(self, id): self.last_obs_id = id
 
 # subsystem
 class Obstacle:

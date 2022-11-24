@@ -68,13 +68,15 @@ class SelectTargetMarker:
 
         cls.drone_pos = drone_pos
         id, corners = cls._get_marker_with_min_id(markers)
+
         if id == -1:
             marker_status.reset()
             return marker_status
 
         # Checks if id is not out range (17)
-        if id <= Environment.get_nb_obstacles():
+        if id < Environment.get_nb_obstacles():
             offset = obstacles.get_obstacle(id).get_offset()
+            obstacles.set_last_obs_id(id) # Save last seen marker
         else:
             # Valeur par default
             offset = [-4, 0]
@@ -151,7 +153,6 @@ class SelectTargetMarker:
         #             target_corners = markers.corners[i][0]
 
         # marker_status.last_target = target_id
-
         return target_id, target_corners
 
     @staticmethod

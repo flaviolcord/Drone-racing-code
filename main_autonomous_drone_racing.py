@@ -30,7 +30,7 @@ def setup():
 def run(compteur, obstacles):
     # run keyboard subsystem
     rc_status_1, key_status, mode_status = ReadKeyboard.run(rc_threshold=20)
-    print(mode_status.value)
+
     # get keyboard subsystem
     frame, drone_status = TelloSensors.run(mode_status)
     markers_status, frame = MarkersDetected.run(frame)
@@ -70,8 +70,8 @@ def run(compteur, obstacles):
 def stop():
     Display.stop()
     TelloSensors.stop()
-    TelloActuators.stop()
-    ReadKeyboard.stop()
+    #TelloActuators.stop()
+    #ReadKeyboard.stop()
     MarkersDetected.stop()
     SelectTargetMarker.stop()
 
@@ -91,8 +91,6 @@ if __name__ == "__main__":
     obstacles = Obstacles(Environment.get_obstacles_ids())
 
     while run_status.value:
-       
-        #print("compteur",compteur,"\n")
 
         #Run
         id_percu, _mode_status = run(compteur, obstacles)
@@ -113,7 +111,6 @@ if __name__ == "__main__":
                 for j in range(Environment.get_nb_obstacles()):
                     if j != id_percu and compteur[j] > 0:
                         compteur[j] = compteur[j]-1
-                print("iddd",compteur,"\n")
     
     stop()
 
