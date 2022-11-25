@@ -12,7 +12,7 @@ from subsys_read_keyboard import mode_status
 
 # Compteur values
 COMPTEUR_VALUE_MIN = 20 # Etudier ces valeurs
-COMPTEUR_VALUE_MAX = 50
+COMPTEUR_VALUE_MAX = 60
 
 COMPTEUR_LOST_MARKER = 20
 COMPTEUR_LAND = 150
@@ -24,8 +24,8 @@ class rc_status:#au debut tout à l'arret
     d = 0
    
 class VisualControl:
-    KP_LR_CTRL = 0.1#a modifier le jour J
-    KP_YAW_CTRL = 0.4
+    KP_LR_CTRL = 0.4#a modifier le jour J
+    KP_YAW_CTRL = 0.6
     cmp = 0
     
     @classmethod
@@ -37,19 +37,22 @@ class VisualControl:
         # Checks last obstacle
         if obstacles.get_last_obs_id() == (Environment.get_nb_obstacles() - 1) : final_obs_arrived = True
         else: final_obs_arrived = False
+
         
-        for i in range (1, Environment.get_nb_obstacles()):
-            if (compteur[i] < COMPTEUR_VALUE_MIN) and (compteur[i-1] > COMPTEUR_VALUE_MAX):
-                idd = i #permet de récupérer le numéro de la prochaine port à passer
+        # Define current porte
+        for i in range (Environment.get_nb_obstacles()-1,1,-1):
+
+            if i == 0:
+                continue
+
+            if (compteur[i]> COMPTEUR_VALUE_MIN and compteur[i-1] < COMPTEUR_VALUE_MAX):
+                print("\n TEst \n")
+                porte_actuelle = i #permet de récupérer le numéro de la prochaine port à passer
                 break
             else:
-                idd = 0
-    
-        if idd != 0 :
-            porte_actuelle = idd-1
-        else:
-            porte_actuelle = 0
-
+                #print("oookokok\n")
+                porte_actuelle = obstacles.get_last_obs_id()
+        
         # Land condition for circule of the obstacles
         if final_obs_arrived and compteur[0] > int(COMPTEUR_LAND/4) :
                     #Land
@@ -99,7 +102,7 @@ class VisualControl:
 
                 else:
                     rc_status.a=0 
-                    rc_status.b=30 # Check velocity !
+                    rc_status.b=50 # Check velocity !
                     rc_status.c=0
                     rc_status.d=0
 
@@ -117,7 +120,8 @@ class VisualControl:
         # rc_status.a = int(cls.KP_LR_CTRL * DX)
         
         #------- Reduire les zig-zags
-        if compteur[porte_actuelle] > 20 : #ce compteur évite de tourner trop tôt
+        print("porte_actuelle : ", porte_actuelle, "Valeur compteur : ", compteur[porte_actuelle])
+        if True:#compteur[porte_actuelle] > 5: #ce compteur évite de tourner trop tôt
         #Yaw velocity control
             rc_status.d = int(cls.KP_YAW_CTRL * phi)
         #Left/Right velocity control

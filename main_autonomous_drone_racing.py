@@ -17,7 +17,7 @@ NB_ITERATION = 1000
 DISTANCE_LAST_MARKER = 1000 # 1 m
 
 def setup():
-    ENV.status = ENV.REAL# met 2 éléments de la classe ENV à égalité
+    ENV.status = ENV.SIMULATION# met 2 éléments de la classe ENV à égalité
     TelloSensors.setup()
     TelloActuators.setup(TelloSensors.TELLO)
     ReadCAM.setup()
@@ -61,7 +61,8 @@ def run(compteur, obstacles):
                 m_angle=int(marker_status.m_angle * RAD2DEG),
                 m_distance=marker_status.m_distance,
                 m_height=marker_status.height,
-                m_width=marker_status.width
+                m_width=marker_status.width,
+            
                 )
 
     time.sleep(1 / FPS)
@@ -102,11 +103,16 @@ if __name__ == "__main__":
             #     Tello.move_forward(DISTANCE_LAST_MARKER)#distance à modifier le jour J
             #     time.sleep(2)
             #     stop()
-
+            #Si le circuit est serré
+            
             # Ajouter ou retirer du compteur
+            
+            if id_percu>0 and id_percu < Environment.get_nb_obstacles():
+                print(id_percu)
+                if compteur[id_percu]==0 and compteur[id_percu-1]==0:
+                    id_percu=-1
             if id_percu == -1:
                 id_percu = Environment.get_nb_obstacles()
-
             if id_percu >= 0 and id_percu <= Environment.get_nb_obstacles():
                 compteur[id_percu] = compteur[id_percu]+1
                 for j in range(Environment.get_nb_obstacles()):
