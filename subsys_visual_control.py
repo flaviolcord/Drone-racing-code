@@ -39,8 +39,8 @@ class VisualControl:
         else: final_obs_arrived = False
 
         
-        # Define current porte
-        for i in range (Environment.get_nb_obstacles()-1,1,-1):
+        # ------------------- Define current porte --------------------------
+        """ for i in range (Environment.get_nb_obstacles()-1,1,-1):
 
             if i == 0:
                 continue
@@ -48,12 +48,20 @@ class VisualControl:
             if (compteur[i]> COMPTEUR_VALUE_MIN and compteur[i-1] < COMPTEUR_VALUE_MAX):
                 print("\n TEst \n")
                 porte_actuelle = i #permet de récupérer le numéro de la prochaine port à passer
-                break
+                break   
             else:
                 #print("oookokok\n")
-                porte_actuelle = obstacles.get_last_obs_id()
+                porte_actuelle = obstacles.get_last_obs_id() """
+
+        if obstacles.get_last_obs_id() == 0 :
+            porte_actuelle = 0
+        elif compteur[obstacles.get_last_obs_id()] > COMPTEUR_VALUE_MIN :
+            porte_actuelle = obstacles.get_last_obs_id()
+        else :
+            porte_actuelle = obstacles.get_last_obs_id() - 1
+
         
-        # Land condition for circule of the obstacles
+        #------------- Land condition for circule of the obstacles
         if final_obs_arrived and compteur[0] > int(COMPTEUR_LAND/4) :
                     #Land
                     print("\n Final obstacle arrived \n")
