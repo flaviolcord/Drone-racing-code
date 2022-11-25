@@ -107,7 +107,7 @@ if __name__ == "__main__":
             if id_percu == -1:
                 id_percu = Environment.get_nb_obstacles()
 
-            if id_percu >= 0 and id_percu < Environment.get_nb_obstacles():
+            if id_percu >= 0 and id_percu <= Environment.get_nb_obstacles():
                 compteur[id_percu] = compteur[id_percu]+1
                 for j in range(Environment.get_nb_obstacles()):
                     if j != id_percu and compteur[j] > 0 :

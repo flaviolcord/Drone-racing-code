@@ -14,8 +14,8 @@ from subsys_read_keyboard import mode_status
 COMPTEUR_VALUE_MIN = 20 # Etudier ces valeurs
 COMPTEUR_VALUE_MAX = 50
 
-COMPTEUR_LOST_MARKER = 80
-COMPTEUR_LAND = 80
+COMPTEUR_LOST_MARKER = 30
+COMPTEUR_LAND = 100
 
 class rc_status:#au debut tout à l'arret
     a = 0
