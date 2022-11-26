@@ -11,11 +11,10 @@ from subsys_read_keyboard import mode_status
 # output of subsystem
 
 # Compteur values
-COMPTEUR_VALUE_MIN = 250 # Etudier ces valeurs
-COMPTEUR_VALUE_MAX = 60
+COMPTEUR_VALUE_MIN = 220 # Etudier ces valeurs
 
 COMPTEUR_LOST_MARKER = 20
-COMPTEUR_LAND = 150
+COMPTEUR_LAND = 230
 
 # Constants Velocity
 VITESSE_B = 50
@@ -65,11 +64,21 @@ class VisualControl:
         else :
             porte_actuelle = obstacles.get_last_obs_id() - 1
 
+        # Get obstacle values : height and type
+        obst = obstacles.get_obstacle(porte_actuelle)
+        hauteur_obs = obst.get_height()
+        type = obst.get_type()
+
+        #------------- Regler l'HAUTEUR drone ---------------
+        if drone_status.hauteur < hauteur_obs:
+                rc_status.c = VITESSE_MONTER #pourcentage vitesse de montée 
+        if drone_status.hauteur > hauteur_obs:
+            rc_status.c = -VITESSE_DESCENDRE
+        #-----------------------------------------------------------------
         
         # Checks last obstacle
         if porte_actuelle == (Environment.get_nb_obstacles() - 1) : final_obs_arrived = True
         else: final_obs_arrived = False
-
         
         #------------- Land condition for circule of the obstacles
         if final_obs_arrived and compteur[0] > int(COMPTEUR_LAND/4) :
@@ -79,8 +88,9 @@ class VisualControl:
                     TelloSensors.run(mode_status)
 
                     return rc_status
+        #-------------------------------------------------------------------
 
-        # Target marker lost
+        #------------------ Target marker lost ----------------------------------
         if target_marker.id == -1:
             print(compteur)
             # Drone is going to the last obstacle
@@ -96,7 +106,7 @@ class VisualControl:
                 else:
                     rc_status.a=0 
                     rc_status.b = VITESSE_FOWARD_LAST_OBS # Check velocity !
-                    rc_status.c=0
+                    #rc_status.c=0
                     rc_status.d=0
 
                     return rc_status
@@ -106,84 +116,51 @@ class VisualControl:
                 if (compteur[Environment.get_nb_obstacles()] > COMPTEUR_LOST_MARKER):
 
                     rc_status.b = 0 
-                    rc_status.c = 0 #pas de descente ni de montée
+                    #rc_status.c = 0 #pas de descente ni de montée
                     
                     # Tourner pour trouver le marker 
-                    #print("la prochaine porte à passer est:",idd,"\n")
                     if Environment.get_next_direction(porte_actuelle) >= 0 and drone_status.hauteur > 0 : #à changer en fonction de la porte suivant
                         rc_status.d = VITESSE_ROTATION_PERDU
                     if Environment.get_next_direction(porte_actuelle) < 0 and drone_status.hauteur > 0 : #à changer en réel
                         rc_status.d = - VITESSE_ROTATION_PERDU #int(0.99*rc_status.d)    # yaw_velocity
+
                     #rc_status.a = int(0.99*rc_status.a)    # left_right_velocity
                     # wait for the drone to pass the last Gate
-                    if drone_status.hauteur<100:
-                        rc_status.c=20
-                    if drone_status.hauteur>150:
-                        rc_status.c=-20
-                    return rc_status
+
+                    # if drone_status.hauteur<100:
+                    #     rc_status.c=20
+                    # if drone_status.hauteur>150:
+                    #     rc_status.c=-20
+                    # return rc_status
 
                 else:
                     rc_status.a=0 
                     rc_status.b = VITESSE_B # Check velocity !
-                    rc_status.c=0
+                    #rc_status.c=0
                     rc_status.d=0
 
                     return rc_status
+        # -------------------------------------------------------------------
         
         # Get the angle and the distance between the marker and the drone
         phi = int(target_marker.m_angle * RAD2DEG) #angle entre le marker et la trajectoire du drone en degré
         distance = marker_status.m_distance #distance au markeur
-
-        # # Yaw velocity control
-        #rc_status.d = int(cls.KP_YAW_CTRL * phi)
-
-        # Left/Right velocity control
-        # DX = distance * np.sin(phi*DEG2RAD)
-        # rc_status.a = int(cls.KP_LR_CTRL * DX)
         
-        #------- Reduire les zig-zags
+        #-------- ------------- Reduire les zig-zags
         print("porte_actuelle : ", porte_actuelle, "Valeur compteur : ", compteur[porte_actuelle])
-        # Creer variable pour la condition
-        if True:#compteur[porte_actuelle] > 30: #ce compteur évite de tourner trop tôt
-        #Yaw velocity control
-            rc_status.d = int(cls.KP_YAW_CTRL * phi)
+        rc_status.d = int(cls.KP_YAW_CTRL * phi)
         #Left/Right velocity control
-            DX = distance * np.sin(phi*DEG2RAD)
-            rc_status.a = int(cls.KP_LR_CTRL * DX)
-        else:
-            rc_status.a=0 
-            rc_status.b=30 # Check velocity !
-            rc_status.c=0
-            rc_status.d=0
-            return rc_status
+        DX = distance * np.sin(phi*DEG2RAD)
+        rc_status.a = int(cls.KP_LR_CTRL * DX)
 
-        # Forward/Backward velocity control
-        rb_threshold = Environment.Pourcentage_vitesse# pourcentage de vitesse fixé dans l'environnement
+        #---------- Forward/Backward velocity control -----------------------------
+        rb_threshold = Environment.Pourcentage_vitesse # pourcentage de vitesse fixé dans l'environnement
         #rc_status.b = rb_threshold
         if rc_status.d < 15 :
             rc_status.b = rb_threshold
         else:
             rc_status.b = rb_threshold - int(rb_threshold * abs(phi)/70) #angle est de 0 quand on se trouve dans la trajectoire de la porte
-        print("le drone est au niveau de la porte n°",porte_actuelle, "\n")
-        
-        # Get obstacle values : height and type
-        obst = obstacles.get_obstacle(porte_actuelle)
-        hauteur_obs = obst.get_height()
-        type = obst.get_type()
 
-        #print("hauteur de la porte:", hauteur_obs)
-
-        # Regler l'hauteur drone
-        if drone_status.hauteur < hauteur_obs:
-                #print("MONTER", drone_status.hauteur)
-                rc_status.c = VITESSE_MONTER #pourcentage vitesse de montée 
-        if drone_status.hauteur > hauteur_obs:
-            #print("MONTER", drone_status.hauteur)
-            rc_status.c = -VITESSE_DESCENDRE
-        elif drone_status.hauteur<90:
-            rc_status.c=20
-        if drone_status.hauteur>220:
-            rc_status.c=-20
         return rc_status
 
         
