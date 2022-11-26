@@ -6,7 +6,7 @@ class Environment:
 
 
     offset_circle = -6
-    list_offset=[-7,-7,-7,-7,-7,-7,-7,-7,-7,-7,-7, -7]
+    list_offset=[-7,-7,-7,-7,-7,-9,-9,-7,-7,-7,-7, -7]
     list_direction_next_marker = [-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1]#
     Pourcentage_vitesse = 80
 

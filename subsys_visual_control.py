@@ -20,7 +20,7 @@ conteur_montee_descente=30
 VITESSE_B = 50
 VITESSE_MONTER = 30
 VITESSE_DESCENDRE = 60
-VITESSE_ROTATION_PERDU = 60
+VITESSE_ROTATION_PERDU = 40
 
 
 VITESSE_FOWARD_LAST_OBS = Environment.Pourcentage_vitesse # Id = -1 (last obstacle, else case)
@@ -70,11 +70,11 @@ class VisualControl:
         type = obst.get_type()
 
         #------------- Regler l'HAUTEUR drone ---------------
-        if drone_status.hauteur>20 and compteur[porte_actuelle]>conteur_montee_descente:
-            if drone_status.hauteur < hauteur_obs:
-                rc_status.c = VITESSE_MONTER #pourcentage vitesse de montée 
-            if drone_status.hauteur > hauteur_obs:
-                rc_status.c = -VITESSE_DESCENDRE
+        # if drone_status.hauteur>20 and compteur[porte_actuelle]>conteur_montee_descente:
+        #     if drone_status.hauteur < hauteur_obs:
+        #         rc_status.c = VITESSE_MONTER #pourcentage vitesse de montée 
+        #     if drone_status.hauteur > hauteur_obs:
+        #         rc_status.c = -VITESSE_DESCENDRE
         #-----------------------------------------------------------------
         
         # Checks last obstacle
@@ -107,7 +107,7 @@ class VisualControl:
                 else:
                     rc_status.a=0 
                     rc_status.b = VITESSE_FOWARD_LAST_OBS # Check velocity !
-                    #rc_status.c=0
+                    rc_status.c=0
                     rc_status.d=0
 
                     return rc_status
@@ -115,27 +115,26 @@ class VisualControl:
             # Drone lost is in the middle of the circuit
             else:
 
-                if (compteur[Environment.get_nb_obstacles()] > COMPTEUR_LOST_MARKER):
+                if (compteur[9] > COMPTEUR_LOST_MARKER):
 
                     # Get obstacle values : height and type
-                    obst = obstacles.get_obstacle(obstacles.get_last_obs_id())
-                    hauteur_obs = obst.get_height()
-                    type = obst.get_type()
+                    # obst = obstacles.get_obstacle(obstacles.get_last_obs_id())
+                    # hauteur_obs = obst.get_height()
+                    # type = obst.get_type()
 
-                    #Regler hauteur
-                    if drone_status.hauteur < hauteur_obs:
-                        rc_status.c = VITESSE_MONTER #pourcentage vitesse de montée 
-                    if drone_status.hauteur > hauteur_obs:
-                        rc_status.c = -VITESSE_DESCENDRE
+                    # #Regler hauteur
+                    # if drone_status.hauteur < hauteur_obs:
+                    #     rc_status.c = VITESSE_MONTER #pourcentage vitesse de montée 
+                    # if drone_status.hauteur > hauteur_obs:
+                    #     rc_status.c = -VITESSE_DESCENDRE
 
                     rc_status.b = 0 
-                    #rc_status.c = 0 #pas de descente ni de montée
+                    rc_status.c = 0 #pas de descente ni de montée
                     
                     # Tourner pour trouver le marker 
-                    if Environment.get_next_direction(porte_actuelle) >= 0 and drone_status.hauteur > 0 : #à changer en fonction de la porte suivant
-                        rc_status.d = VITESSE_ROTATION_PERDU
-                    if Environment.get_next_direction(porte_actuelle) < 0 and drone_status.hauteur > 0 : #à changer en réel
-                        rc_status.d = - VITESSE_ROTATION_PERDU #int(0.99*rc_status.d)    # yaw_velocity
+                    if drone_status.hauteur > 20 : #à changer en fonction de la porte suivant
+                        rc_status.d = -VITESSE_ROTATION_PERDU
+                    
 
                     #rc_status.a = int(0.99*rc_status.a)    # left_right_velocity
                     # wait for the drone to pass the last Gate
@@ -149,7 +148,7 @@ class VisualControl:
                 else:
                     rc_status.a=0 
                     rc_status.b = VITESSE_B # Check velocity !
-                    #rc_status.c=0
+                    rc_status.c=0
                     rc_status.d=0
 
                     return rc_status
