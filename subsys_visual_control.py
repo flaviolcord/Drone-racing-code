@@ -34,11 +34,7 @@ class VisualControl:
         pass
     @classmethod
     def run(cls, target_marker, drone_status, compteur, obstacles):# partie à modifier
-        # Checks last obstacle
-        if obstacles.get_last_obs_id() == (Environment.get_nb_obstacles() - 1) : final_obs_arrived = True
-        else: final_obs_arrived = False
-
-        
+  
         # ------------------- Define current porte --------------------------
         """ for i in range (Environment.get_nb_obstacles()-1,1,-1):
 
@@ -59,6 +55,11 @@ class VisualControl:
             porte_actuelle = obstacles.get_last_obs_id()
         else :
             porte_actuelle = obstacles.get_last_obs_id() - 1
+
+        
+        # Checks last obstacle
+        if porte_actuelle == (Environment.get_nb_obstacles() - 1) : final_obs_arrived = True
+        else: final_obs_arrived = False
 
         
         #------------- Land condition for circule of the obstacles
