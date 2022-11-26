@@ -11,7 +11,7 @@ from subsys_read_keyboard import mode_status
 # output of subsystem
 
 # Compteur values
-COMPTEUR_VALUE_MIN = 20 # Etudier ces valeurs
+COMPTEUR_VALUE_MIN = 250 # Etudier ces valeurs
 COMPTEUR_VALUE_MAX = 60
 
 COMPTEUR_LOST_MARKER = 20
@@ -19,8 +19,8 @@ COMPTEUR_LAND = 150
 
 # Constants Velocity
 VITESSE_B = 50
-VITESSE_MONTER = 17
-VITESSE_DESCENDRE = 15 
+VITESSE_MONTER = 30
+VITESSE_DESCENDRE = 30 
 VITESSE_ROTATION_PERDU = 60
 
 
@@ -33,8 +33,8 @@ class rc_status:#au debut tout à l'arret
     d = 0
    
 class VisualControl:
-    KP_LR_CTRL = 0.4#a modifier le jour J
-    KP_YAW_CTRL = 0.6
+    KP_LR_CTRL = 0.1 #a modifier le jour J
+    KP_YAW_CTRL = 0.4
     cmp = 0
     
     @classmethod
@@ -84,7 +84,8 @@ class VisualControl:
         if target_marker.id == -1:
             print(compteur)
             # Drone is going to the last obstacle
-            if obstacles.get_last_obs_id() == (Environment.get_nb_obstacles() - 1) :
+            #if obstacles.get_last_obs_id() == (Environment.get_nb_obstacles() - 1) :
+            if porte_actuelle == (Environment.get_nb_obstacles() - 1) :
                 if (compteur[Environment.get_nb_obstacles()] > COMPTEUR_LAND):
                     #Land
                     print("\n Land command activated \n")
@@ -115,7 +116,10 @@ class VisualControl:
                         rc_status.d = - VITESSE_ROTATION_PERDU #int(0.99*rc_status.d)    # yaw_velocity
                     #rc_status.a = int(0.99*rc_status.a)    # left_right_velocity
                     # wait for the drone to pass the last Gate
-
+                    if drone_status.hauteur<100:
+                        rc_status.c=20
+                    if drone_status.hauteur>150:
+                        rc_status.c=-20
                     return rc_status
 
                 else:
@@ -140,7 +144,7 @@ class VisualControl:
         #------- Reduire les zig-zags
         print("porte_actuelle : ", porte_actuelle, "Valeur compteur : ", compteur[porte_actuelle])
         # Creer variable pour la condition
-        if True:#compteur[porte_actuelle] > 5: #ce compteur évite de tourner trop tôt
+        if True:#compteur[porte_actuelle] > 30: #ce compteur évite de tourner trop tôt
         #Yaw velocity control
             rc_status.d = int(cls.KP_YAW_CTRL * phi)
         #Left/Right velocity control
@@ -170,13 +174,16 @@ class VisualControl:
         #print("hauteur de la porte:", hauteur_obs)
 
         # Regler l'hauteur drone
-        if type == Environment.TV_TYPE and drone_status.hauteur < hauteur_obs:
+        if drone_status.hauteur < hauteur_obs:
                 #print("MONTER", drone_status.hauteur)
                 rc_status.c = VITESSE_MONTER #pourcentage vitesse de montée 
-        if type != Environment.TV_TYPE and drone_status.hauteur > hauteur_obs:
+        if drone_status.hauteur > hauteur_obs:
             #print("MONTER", drone_status.hauteur)
             rc_status.c = -VITESSE_DESCENDRE
-
+        elif drone_status.hauteur<90:
+            rc_status.c=20
+        if drone_status.hauteur>220:
+            rc_status.c=-20
         return rc_status
 
         
