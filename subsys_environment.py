@@ -6,9 +6,9 @@ class Environment:
 
 
     offset_circle = -6
-    list_offset=[-7,-9,-7,-5,-6,-6,-6,5,-6,-6,-6, -6]
+    list_offset=[-7,-7,-7,-7,-7,-7,-7,-7,-7,-7,-7, -7]
     list_direction_next_marker = [-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1]#
-    Pourcentage_vitesse = 60
+    Pourcentage_vitesse = 80
 
     #--------------- Obstacle ----------------------
 
@@ -34,7 +34,7 @@ class Environment:
 
     # TV - type 1
     TV_TYPE = 1
-    TV_HEIGHT = 200
+    TV_HEIGHT = 220
     TV_WIDTH = 0.0
     TV_ORIENTATION = 0
     TV_OFFSET = [-4, 0]
@@ -64,8 +64,8 @@ class Environment:
     obstacle_dimensions = [ARCH_DIMENSIONS, TV_DIMENSIONS, TURN_LEFT_DIMENSIONS, TURN_RIGHT_DIMENSIONS]
 
     # Circuit
-    #list_obstacles = [0, 1, 0,2,2,2,2,3,0] # Positions of the list = id marker, Value of each position = obstacle type {0, 1, 3}
-    list_obstacles = [0, 1, 0] 
+    list_obstacles = [0, 0, 0,0,0,0,0,0,1] # Positions of the list = id marker, Value of each position = obstacle type {0, 1, 3}
+    #list_obstacles = [0, 1, 0] 
 
     # Marker
     MARKER_HEIGHT = 0.0

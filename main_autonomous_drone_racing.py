@@ -17,7 +17,7 @@ NB_ITERATION = 1000
 DISTANCE_LAST_MARKER = 1000 # 1 m
 
 def setup():
-    ENV.status = ENV.REAL  # met 2 éléments de la classe ENV à égalité
+    ENV.status = ENV.REAL # met 2 éléments de la classe ENV à égalité
     TelloSensors.setup()
     TelloActuators.setup(TelloSensors.TELLO)
     ReadCAM.setup()

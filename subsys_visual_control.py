@@ -13,11 +13,11 @@ from subsys_read_keyboard import mode_status
 # Compteur values
 COMPTEUR_VALUE_MIN = 250 #* int(2 - Environment.Pourcentage_vitesse/100) # Etudier ces valeurs
 
-COMPTEUR_LOST_MARKER = 30
+COMPTEUR_LOST_MARKER = 20
 COMPTEUR_LAND = 250
-
+conteur_montee_descente=30
 # Constants Velocity
-VITESSE_B = 30
+VITESSE_B = 50
 VITESSE_MONTER = 30
 VITESSE_DESCENDRE = 60
 VITESSE_ROTATION_PERDU = 60
@@ -70,7 +70,7 @@ class VisualControl:
         type = obst.get_type()
 
         #------------- Regler l'HAUTEUR drone ---------------
-        if drone_status.hauteur>20:
+        if drone_status.hauteur>20 and compteur[porte_actuelle]>conteur_montee_descente:
             if drone_status.hauteur < hauteur_obs:
                 rc_status.c = VITESSE_MONTER #pourcentage vitesse de montée 
             if drone_status.hauteur > hauteur_obs:
