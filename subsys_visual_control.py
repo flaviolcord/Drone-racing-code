@@ -17,6 +17,15 @@ COMPTEUR_VALUE_MAX = 60
 COMPTEUR_LOST_MARKER = 20
 COMPTEUR_LAND = 150
 
+# Constants Velocity
+VITESSE_B = 50
+VITESSE_MONTER = 17
+VITESSE_DESCENDRE = 15 
+VITESSE_ROTATION_PERDU = 60
+
+
+VITESSE_FOWARD_LAST_OBS = 30 # Id = -1 (last obstacle, else case)
+
 class rc_status:#au debut tout à l'arret
     a = 0
     b = 0
@@ -85,7 +94,7 @@ class VisualControl:
                     return rc_status
                 else:
                     rc_status.a=0 
-                    rc_status.b=30 # Check velocity !
+                    rc_status.b = VITESSE_FOWARD_LAST_OBS # Check velocity !
                     rc_status.c=0
                     rc_status.d=0
 
@@ -101,9 +110,9 @@ class VisualControl:
                     # Tourner pour trouver le marker 
                     #print("la prochaine porte à passer est:",idd,"\n")
                     if Environment.get_next_direction(porte_actuelle) >= 0 and drone_status.hauteur > 0 : #à changer en fonction de la porte suivant
-                        rc_status.d = 60
+                        rc_status.d = VITESSE_ROTATION_PERDU
                     if Environment.get_next_direction(porte_actuelle) < 0 and drone_status.hauteur > 0 : #à changer en réel
-                        rc_status.d = -60 #int(0.99*rc_status.d)    # yaw_velocity
+                        rc_status.d = - VITESSE_ROTATION_PERDU #int(0.99*rc_status.d)    # yaw_velocity
                     #rc_status.a = int(0.99*rc_status.a)    # left_right_velocity
                     # wait for the drone to pass the last Gate
 
@@ -111,7 +120,7 @@ class VisualControl:
 
                 else:
                     rc_status.a=0 
-                    rc_status.b=50 # Check velocity !
+                    rc_status.b = VITESSE_B # Check velocity !
                     rc_status.c=0
                     rc_status.d=0
 
@@ -130,6 +139,7 @@ class VisualControl:
         
         #------- Reduire les zig-zags
         print("porte_actuelle : ", porte_actuelle, "Valeur compteur : ", compteur[porte_actuelle])
+        # Creer variable pour la condition
         if True:#compteur[porte_actuelle] > 5: #ce compteur évite de tourner trop tôt
         #Yaw velocity control
             rc_status.d = int(cls.KP_YAW_CTRL * phi)
@@ -160,12 +170,12 @@ class VisualControl:
         #print("hauteur de la porte:", hauteur_obs)
 
         # Regler l'hauteur drone
-        # if type == Environment.TV_TYPE and drone_status.hauteur < hauteur_obs:
-        #         #print("MONTER", drone_status.hauteur)
-        #         rc_status.c=17 #pourcentage vitesse de montée 
-        # if type != Environment.TV_TYPE and drone_status.hauteur > hauteur_obs:
-        #     #print("MONTER", drone_status.hauteur)
-        #     rc_status.c=-15
+        if type == Environment.TV_TYPE and drone_status.hauteur < hauteur_obs:
+                #print("MONTER", drone_status.hauteur)
+                rc_status.c = VITESSE_MONTER #pourcentage vitesse de montée 
+        if type != Environment.TV_TYPE and drone_status.hauteur > hauteur_obs:
+            #print("MONTER", drone_status.hauteur)
+            rc_status.c = -VITESSE_DESCENDRE
 
         return rc_status
 
