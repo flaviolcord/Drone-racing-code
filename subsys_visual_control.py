@@ -11,19 +11,19 @@ from subsys_read_keyboard import mode_status
 # output of subsystem
 
 # Compteur values
-COMPTEUR_VALUE_MIN = 220 # Etudier ces valeurs
+COMPTEUR_VALUE_MIN = 250 # Etudier ces valeurs
 
 COMPTEUR_LOST_MARKER = 20
 COMPTEUR_LAND = 230
 
 # Constants Velocity
-VITESSE_B = 50
+VITESSE_B = 30
 VITESSE_MONTER = 30
 VITESSE_DESCENDRE = 30 
 VITESSE_ROTATION_PERDU = 60
 
 
-VITESSE_FOWARD_LAST_OBS = 30 # Id = -1 (last obstacle, else case)
+VITESSE_FOWARD_LAST_OBS = Environment.Pourcentage_vitesse # Id = -1 (last obstacle, else case)
 
 class rc_status:#au debut tout à l'arret
     a = 0
@@ -70,10 +70,11 @@ class VisualControl:
         type = obst.get_type()
 
         #------------- Regler l'HAUTEUR drone ---------------
-        if drone_status.hauteur < hauteur_obs:
+        if drone_status.hauteur>20:
+            if drone_status.hauteur < hauteur_obs:
                 rc_status.c = VITESSE_MONTER #pourcentage vitesse de montée 
-        if drone_status.hauteur > hauteur_obs:
-            rc_status.c = -VITESSE_DESCENDRE
+            if drone_status.hauteur > hauteur_obs:
+                rc_status.c = -VITESSE_DESCENDRE
         #-----------------------------------------------------------------
         
         # Checks last obstacle
