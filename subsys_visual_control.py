@@ -11,15 +11,15 @@ from subsys_read_keyboard import mode_status
 # output of subsystem
 
 # Compteur values
-COMPTEUR_VALUE_MIN = 250 # Etudier ces valeurs
+COMPTEUR_VALUE_MIN = 250 #* int(2 - Environment.Pourcentage_vitesse/100) # Etudier ces valeurs
 
-COMPTEUR_LOST_MARKER = 20
-COMPTEUR_LAND = 230
+COMPTEUR_LOST_MARKER = 30
+COMPTEUR_LAND = 250
 
 # Constants Velocity
 VITESSE_B = 30
 VITESSE_MONTER = 30
-VITESSE_DESCENDRE = 30 
+VITESSE_DESCENDRE = 60
 VITESSE_ROTATION_PERDU = 60
 
 
@@ -32,8 +32,8 @@ class rc_status:#au debut tout à l'arret
     d = 0
    
 class VisualControl:
-    KP_LR_CTRL = 0.1 #a modifier le jour J
-    KP_YAW_CTRL = 0.4
+    KP_LR_CTRL = 0.25 #a modifier le jour J
+    KP_YAW_CTRL = 0.5
     cmp = 0
     
     @classmethod
@@ -114,7 +114,19 @@ class VisualControl:
                     
             # Drone lost is in the middle of the circuit
             else:
+
                 if (compteur[Environment.get_nb_obstacles()] > COMPTEUR_LOST_MARKER):
+
+                    # Get obstacle values : height and type
+                    obst = obstacles.get_obstacle(obstacles.get_last_obs_id())
+                    hauteur_obs = obst.get_height()
+                    type = obst.get_type()
+
+                    #Regler hauteur
+                    if drone_status.hauteur < hauteur_obs:
+                        rc_status.c = VITESSE_MONTER #pourcentage vitesse de montée 
+                    if drone_status.hauteur > hauteur_obs:
+                        rc_status.c = -VITESSE_DESCENDRE
 
                     rc_status.b = 0 
                     #rc_status.c = 0 #pas de descente ni de montée
